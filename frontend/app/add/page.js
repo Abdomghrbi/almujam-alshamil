@@ -74,7 +74,7 @@ export default function AddWordPage() {
       }
 
       const token = localStorage.getItem('token');
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/words`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/words`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -152,7 +152,7 @@ export default function AddWordPage() {
             onChange={(e) => handleChange('meaning', e.target.value)}
             required
             rows={4}
-            placeholder="اكتب معنى الكلمة بالتفصيل…"
+            placeholder="اكتب معنى الكلمة بالتفصيل."
             className="input-field resize-none"
           />
         </div>
@@ -165,7 +165,7 @@ export default function AddWordPage() {
               type="text"
               value={form.root}
               onChange={(e) => handleChange('root', e.target.value)}
-              placeholder="مثال: كتب"
+              placeholder=" مثال: كَتَبَ، فَعَلَ.."
               className="input-field"
             />
           </div>
