@@ -33,7 +33,7 @@ export default function SearchPage() {
       if (filters.dialect) params.append('dialect', filters.dialect);
       if (filters.type) params.append('type', filters.type);
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/search?${params}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/search?${params}`);
       const data = await res.json();
       setResults(data.results || []);
     } catch (err) {
