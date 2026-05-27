@@ -18,7 +18,7 @@ export default function WordDetailPage() {
   const fetchWord = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/words/${encodeURIComponent(wordSlug)}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/words/${encodeURIComponent(wordSlug)}`);
       const data = await res.json();
       setWord(data.word);
       setRelatedWords(data.related || []);
