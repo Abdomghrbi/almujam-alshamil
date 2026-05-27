@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/app/layout';
+import { useAuth } from '../app/layout';
 import { BookOpen, PlusCircle, Search, User, LogOut, Sun, Moon, Menu, X, Shield } from 'lucide-react';
 
 export default function Navbar() {

@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/app/layout';
-import LocationPicker from '@/components/LocationPicker';
-import AudioRecorder from '@/components/AudioRecorder';
+import { useAuth } from '../layout';
+import LocationPicker from '../../components/LocationPicker';
+import AudioRecorder from '../../components/AudioRecorder';
 import { PlusCircle, Upload, Mic } from 'lucide-react';
 
 export default function AddWordPage() {

@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import SearchBar from '@/components/SearchBar';
-import WordCard from '@/components/WordCard';
+import SearchBar from '../../components/SearchBar';
+import WordCard from '../../components/WordCard';
 import { Search, Filter, SlidersHorizontal, X } from 'lucide-react';
 
 export default function SearchPage() {

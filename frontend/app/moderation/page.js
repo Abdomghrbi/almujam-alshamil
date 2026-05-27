@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/app/layout';
+import { useAuth } from '../layout';
 import { Shield, Check, X, Mic, MapPin } from 'lucide-react';
 
 export default function ModerationPage() {
