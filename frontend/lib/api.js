@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com
-(بدون /api في الآخر)';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com';
 
 const api = axios.create({
   baseURL: API_URL,
