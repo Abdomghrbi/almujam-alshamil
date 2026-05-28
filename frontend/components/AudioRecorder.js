@@ -44,7 +44,7 @@ export default function AudioRecorder({ onRecorded }) {
       timerRef.current = setInterval(() => {
         seconds++;
         setDuration(seconds);
-        if (seconds >= 1200) stopRecording(); // Max 2 min
+        if (seconds >= 120) stopRecording(); // Max 2 min
       }, 1000);
     } catch (err) {
       alert('تعذر الوصول إلى المايكروفون. تأكد من الإذن.');
