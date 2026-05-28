@@ -127,12 +127,12 @@ export default function WordDetailPage() {
               <div className="font-medium text-surface-700 dark:text-surface-300">{word.state}</div>
             </div>
           )}
-          //{word.city && (
-            //<div>
-              //<div className="text-xs text-surface-400 mb-1">المدينة</div>
-              //<div className="font-medium text-surface-700 dark:text-surface-300">{word.city}</div>
-          //  </div>
-          //)}
+          {word.city && (
+            <div>
+              <div className="text-xs text-surface-400 mb-1">المدينة</div>
+              <div className="font-medium text-surface-700 dark:text-surface-300">{word.city}</div>
+            </div>
+          )}
           {word.region && (
             <div>
               <div className="text-xs text-surface-400 mb-1">المنطقة</div>
