@@ -28,7 +28,7 @@ router.post('/', authenticateToken, async (req, res) => {
        ON CONFLICT (language, country, COALESCE(state,''), COALESCE(city,''), COALESCE(district,''))
        DO UPDATE SET language = EXCLUDED.language
        RETURNING id`,
-      [language || 'عربية', country, state, city, district]
+      [language || 'العربية', country, state, city, district]
     );
     const location_id = locationResult.rows[0].id;
 
