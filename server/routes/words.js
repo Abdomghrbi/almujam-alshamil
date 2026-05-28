@@ -1,8 +1,3 @@
-const express = require('express');
-const router = express.Router();
-const { authenticateToken } = require('../middleware/auth');
-
-// POST /api/words — إضافة كلمة جديدة
 router.post('/', authenticateToken, async (req, res) => {
   try {
     const {
@@ -13,22 +8,33 @@ router.post('/', authenticateToken, async (req, res) => {
       part_of_speech,
       pronunciation,
       language,
-      country,
-      state,
-      city,
-      district
+      country = '',
+      state = '',
+      city = '',
+      district = ''
     } = req.body;
 
+    // التحقق من القيم الأساسية
+    if (!word || !meaning || !language) {
+      return res.status(400).json({ error: 'المعطيات الأساسية مطلوبة' });
+    }
+
     const pool = req.app.locals.pool;
+
+    // معالجة القيم لضمان عدم وجود null
+    const cleanCountry = country !== null && country !== undefined ? country : '';
+    const cleanState = state !== null && state !== undefined ? state : '';
+    const cleanCity = city !== null && city !== undefined ? city : '';
+    const cleanDistrict = district !== null && district !== undefined ? district : '';
 
     // 1. إضافة أو إيجاد الموقع الجغرافي
     const locationResult = await pool.query(
       `INSERT INTO locations (language, country, state, city, district)
        VALUES ($1, $2, $3, $4, $5)
-       ON CONFLICT (language, country, COALESCE(state,''), COALESCE(city,''), COALESCE(district,''))
+       ON CONFLICT (language, COALESCE(country,''), COALESCE(state,''), COALESCE(city,''), COALESCE(district,''))
        DO UPDATE SET language = EXCLUDED.language
        RETURNING id`,
-      [language || 'عربية', country, state, city, district]
+      [language || 'عربية', cleanCountry, cleanState, cleanCity, cleanDistrict]
     );
     const location_id = locationResult.rows[0].id;
 
@@ -52,40 +58,3 @@ router.post('/', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'خطأ في إضافة الكلمة' });
   }
 });
-
-// GET /api/words/:id — تفاصيل كلمة
-router.get('/:id', async (req, res) => {
-  try {
-    const pool = req.app.locals.pool;
-    const result = await pool.query(
-      `SELECT w.*, 
-              l.language, l.country, l.state, l.city, l.district,
-              u.username AS contributor_name
-       FROM words w
-       LEFT JOIN locations l ON w.location_id = l.id
-       LEFT JOIN users u ON w.contributor_id = u.id
-       WHERE w.id = $1 AND w.status = 'approved'`,
-      [req.params.id]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'الكلمة غير موجودة' });
-    }
-
-    // جلب التسجيلات الصوتية
-    const audioResult = await pool.query(
-      'SELECT id, file_url, file_format, duration_seconds FROM audio_clips WHERE word_id = $1',
-      [req.params.id]
-    );
-
-    res.json({
-      word: result.rows[0],
-      audio_clips: audioResult.rows
-    });
-  } catch (err) {
-    console.error('Get word error:', err);
-    res.status(500).json({ error: 'خطأ في جلب الكلمة' });
-  }
-});
-
-module.exports = router;
