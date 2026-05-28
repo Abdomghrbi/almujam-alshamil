@@ -78,7 +78,8 @@ export default function AudioRecorder({ onRecorded }) {
     <div className="space-y-3">
       {!audioUrl ? (
         <button
-          onClick={recording ? stopRecording : startRecording}
+  type="button"
+  onClick={recording ? stopRecording : startRecording}
           className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-dashed transition-all ${
             recording
               ? 'border-red-400 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 animate-pulse'
@@ -109,7 +110,8 @@ export default function AudioRecorder({ onRecorded }) {
               className="flex-1 h-10"
             />
             <button
-              onClick={clearRecording}
+  type="button"
+  onClick={clearRecording}
               className="p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 text-surface-400 hover:text-red-500 transition-all"
               title="حذف التسجيل"
             >
