@@ -5,8 +5,8 @@ const router = express.Router();
 const { authenticateToken } = require('../middleware/auth');
 
 // POST /api/words — إضافة كلمة جديدة
-router.post('/', authenticateToken, async (req, res) => {
-  try {
+router.post('/', authenticateToken, upload.none(), async (req, res) => {
+
     const {
       word,
       word_type,
