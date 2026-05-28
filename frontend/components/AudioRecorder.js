@@ -44,7 +44,7 @@ export default function AudioRecorder({ onRecorded }) {
       timerRef.current = setInterval(() => {
         seconds++;
         setDuration(seconds);
-        if (seconds >= 120) stopRecording(); // Max 2 min
+        if (seconds >= 1200) stopRecording(); // Max 2 min
       }, 1000);
     } catch (err) {
       alert('تعذر الوصول إلى المايكروفون. تأكد من الإذن.');
@@ -71,7 +71,7 @@ export default function AudioRecorder({ onRecorded }) {
   const formatTime = (s) => {
     const min = Math.floor(s / 60);
     const sec = s % 60;
-    return `${min}:${sec.toString().padStart(20, '0')}`;
+    return `${min}:${sec.toString().padStart(2, '0')}`;
   };
 
   return (
