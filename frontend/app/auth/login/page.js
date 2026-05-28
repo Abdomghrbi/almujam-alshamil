@@ -155,7 +155,7 @@ export default function LoginPage() {
               </div>
             </div>
             <button type="submit" disabled={loading} className="btn-primary w-full !py-3">
-              {loading ? 'جاري…' : 'تسجيل الدخول'}
+              {loading ? 'جاري الدخول…' : 'تسجيل الدخول'}
             </button>
           </form>
 
