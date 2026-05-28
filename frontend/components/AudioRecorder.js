@@ -41,15 +41,12 @@ export default function AudioRecorder({ onRecorded }) {
 
       // Timer
       let seconds = 0;
-      timerRef.current = setInterval(() => {
-        seconds++;
-        setDuration(seconds);
-        if (seconds >= 120) stopRecording(); // Max 2 min
-      }, 1000);
-    } catch (err) {
-      alert('تعذر الوصول إلى المايكروفون. تأكد من الإذن.');
-    }
-  };
+timerRef.current = setInterval(() => {
+  seconds++;
+  setDuration(seconds);
+  if (seconds >= 15) stopRecording(); // Max 15 seconds
+}, 1000);
+
 
   const stopRecording = () => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
