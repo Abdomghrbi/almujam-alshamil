@@ -69,7 +69,7 @@ export default function RootLayout({ children }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>المعجم الشامل — موسوعة اللهجات والمفردات العربية</title>
-        <meta name="description" content="المعجم الشامل هو قاموس مفتوح المصدر يوثق الكلمات العربية الفصحى واللهجات المتنوعة مع التسجيلات الصوتية." />
+        <meta name="description" content="المعجم الشامل هو قاموس مفتوح المصدر يوثّق الكلمات العربية الفُصحىٰ واللهجات المتنوعة مع تسجيلات صوتية حقيقية." />
         <meta name="theme-color" content="#4c6ef5" />
         <link rel="icon" href="/favicon.ico" />
       </head>
