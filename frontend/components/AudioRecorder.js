@@ -71,7 +71,7 @@ export default function AudioRecorder({ onRecorded }) {
   const formatTime = (s) => {
     const min = Math.floor(s / 60);
     const sec = s % 60;
-    return `${min}:${sec.toString().padStart(2, '0')}`;
+    return `${min}:${sec.toString().padStart(20, '0')}`;
   };
 
   return (
