@@ -38,7 +38,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 المعجم الشامل running on port ${PORT}`);
+  console.log(`🚀 المعجم الشامل يعمل على المنفذ: ${PORT}`);
 });
 
 module.exports = { app, pool };
