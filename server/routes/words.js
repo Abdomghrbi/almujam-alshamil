@@ -29,13 +29,12 @@ router.post('/', authenticateToken, async (req, res) => {
 
     // 1. إضافة أو إيجاد الموقع الجغرافي
     const locationResult = await pool.query(
-      `INSERT INTO locations (language, country, state, city, district)
-       VALUES ($1, $2, $3, $4, $5)
-       ON CONFLICT (language, COALESCE(country,''), COALESCE(state,''), COALESCE(city,''), COALESCE(district,''))
-       DO UPDATE SET language = EXCLUDED.language
-       RETURNING id`,
-      [language || 'عربية', cleanCountry, cleanState, cleanCity, cleanDistrict]
-    );
+  `INSERT INTO locations (country, state, city, district)
+   VALUES ($1, $2, $3, $4)
+   RETURNING id`,
+  [country, state, city, district]
+);
+
     const location_id = locationResult.rows[0].id;
 
     // 2. توليد slug
