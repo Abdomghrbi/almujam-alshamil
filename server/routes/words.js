@@ -6,7 +6,7 @@ const { authenticateToken } = require('../middleware/auth');
 
 // POST /api/words — إضافة كلمة جديدة
 router.post('/', authenticateToken, upload.none(), async (req, res) => {
-
+  try {
     const {
       word,
       word_type,
