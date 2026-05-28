@@ -4,23 +4,19 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '../../layout';
-import { UserPlus, User, Lock, Mail, Bug } from 'lucide-react';
+import { UserPlus, User, Lock, Mail } from 'lucide-react';
 
 export default function RegisterPage() {
   const { login } = useAuth();
   const router = useRouter();
   const [form, setForm] = useState({ username: '', email: '', password: '', confirmPassword: '' });
   const [error, setError] = useState('');
-  const [debugInfo, setDebugInfo] = useState(null);
-  const [showDebug, setShowDebug] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    setDebugInfo(null);
-    setShowDebug(false);
 
     if (form.password !== form.confirmPassword) {
       setError('كلمات المرور غير متطابقة');
@@ -61,29 +57,9 @@ export default function RegisterPage() {
         router.push('/');
       } else {
         setError(parsedData?.error || parsedData?.message || `خطأ ${res.status}`);
-        setDebugInfo({
-          apiUrl: endpoint,
-          method: 'POST',
-          requestBody: JSON.stringify({ username: form.username, email: form.email, password: '***' }, null, 2),
-          status: res.status,
-          statusText: res.statusText,
-          responseHeaders: Object.fromEntries(res.headers.entries()),
-          responseBody: typeof parsedData === 'string' ? parsedData : JSON.stringify(parsedData, null, 2),
-        });
       }
     } catch (err) {
       setError('فشل الاتصال بالخادم');
-      setDebugInfo({
-        apiUrl: endpoint,
-        method: 'POST',
-        requestBody: JSON.stringify({ username: form.username, email: form.email, password: '***' }, null, 2),
-        status: 0,
-        statusText: 'Network Error',
-        errorName: err.name,
-        errorMessage: err.message,
-        errorStack: err.stack,
-        responseBody: null,
-      });
     } finally {
       setLoading(false);
     }
@@ -104,48 +80,6 @@ export default function RegisterPage() {
           {error && (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-3 mb-4 text-sm text-red-600 dark:text-red-400 text-center">
               {error}
-              {debugInfo && (
-                <button
-                  onClick={() => setShowDebug(!showDebug)}
-                  className="mr-2 text-red-500 hover:text-red-700 inline-flex items-center gap-1 underline text-xs"
-                >
-                  <Bug size={12} /> {showDebug ? 'إخفاء التفاصيل' : 'عرض التفاصيل'}
-                </button>
-              )}
-            </div>
-          )}
-
-          {debugInfo && showDebug && (
-            <div className="bg-gray-900 text-green-400 rounded-xl p-4 mb-4 text-xs font-mono overflow-x-auto max-h-96 overflow-y-auto border border-gray-700" dir="ltr">
-              <div className="text-white font-bold mb-2 text-sm">🔍 Debug Report</div>
-              <div><span className="text-yellow-300">API URL:</span> {debugInfo.apiUrl}</div>
-              <div><span className="text-yellow-300">Method:</span> {debugInfo.method}</div>
-              <div><span className="text-yellow-300">Status:</span> {debugInfo.status} {debugInfo.statusText}</div>
-              {debugInfo.responseHeaders && (
-                <div>
-                  <span className="text-yellow-300">Response Headers:</span>
-                  <pre className="text-gray-400 ml-2">{JSON.stringify(debugInfo.responseHeaders, null, 2)}</pre>
-                </div>
-              )}
-              {debugInfo.errorName && (
-                <div>
-                  <span className="text-yellow-300">Error:</span> {debugInfo.errorName}: {debugInfo.errorMessage}
-                </div>
-              )}
-              {debugInfo.errorStack && (
-                <div>
-                  <span className="text-yellow-300">Stack:</span>
-                  <pre className="text-gray-400 ml-2">{debugInfo.errorStack}</pre>
-                </div>
-              )}
-              <div>
-                <span className="text-yellow-300">Request Body:</span>
-                <pre className="text-gray-400 ml-2">{debugInfo.requestBody}</pre>
-              </div>
-              <div>
-                <span className="text-yellow-300">Response Body:</span>
-                <pre className="text-gray-400 ml-2">{debugInfo.responseBody || 'null'}</pre>
-              </div>
             </div>
           )}
 
