@@ -175,7 +175,7 @@ export default function AddWordPage() {
               type="text"
               value={form.synonyms}
               onChange={(e) => handleChange('synonyms', e.target.value)}
-              placeholder="مثال: أتى، حضر، ورد"
+              placeholder="مثال: فعل، فاعل، مفعول به"
               className="input-field"
             />
           </div>
