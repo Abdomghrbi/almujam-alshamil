@@ -179,7 +179,7 @@ export default function RegisterPage() {
               </div>
             </div>
             <button type="submit" disabled={loading} className="btn-primary w-full !py-3">
-              {loading ? 'جاري…' : 'إنشاء الحساب'}
+              {loading ? 'جاري التسجيل…' : 'إنشاء الحساب'}
             </button>
           </form>
 
