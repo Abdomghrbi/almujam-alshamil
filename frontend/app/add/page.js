@@ -17,7 +17,7 @@ export default function AddWordPage() {
     meaning: '',
     root: '',
     part_of_speech: '',
-    state: '',
+    pronunciation: '',
     city: '',
     region: '',
     notes: '',
@@ -65,7 +65,7 @@ export default function AddWordPage() {
       formData.append('meaning', form.meaning);
       formData.append('root', form.root);
       formData.append('part_of_speech', form.part_of_speech);
-      formData.append('state', form.state);
+      formData.append('pronunciation', form.pronunciation);
       formData.append('city', form.city);
       formData.append('region', form.region);
       formData.append('notes', form.notes);
