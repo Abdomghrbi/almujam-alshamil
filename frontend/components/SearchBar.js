@@ -15,7 +15,7 @@ export default function SearchBar({ initialQuery = '', onSearch }) {
       clearTimeout(debounceRef.current);
       debounceRef.current = setTimeout(async () => {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/search/suggest?q=${encodeURIComponent(query)}`);
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/search/suggest?q=${encodeURIComponent(query)}`);
           const data = await res.json();
           setSuggestions(data.suggestions || []);
           setShowSuggestions(true);
