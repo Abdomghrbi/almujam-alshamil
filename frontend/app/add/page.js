@@ -12,7 +12,7 @@ export default function AddWordPage() {
   const router = useRouter();
   const [form, setForm] = useState({
     word: '',
-    type: '',
+    slug: '',
     meaning: '',
     root: '',
     synonyms: '',
@@ -60,7 +60,7 @@ export default function AddWordPage() {
     try {
       const formData = new FormData();
       formData.append('word', form.word);
-      formData.append('type', form.type);
+      formData.append('slug', form.slug);
       formData.append('meaning', form.meaning);
       formData.append('root', form.root);
       formData.append('synonyms', form.synonyms);
