@@ -33,7 +33,7 @@ export default function AddWordPage() {
         <div className="card">
           <Mic size={48} className="mx-auto mb-4 text-primary-400" />
           <h2 className="text-xl font-bold text-surface-800 dark:text-white mb-2">يجب تسجيل الدخول أولاً</h2>
-          <p className="text-surface-500 mb-6">لإضافة كلمة جديدة، أنشئ حسابك أو سجل دخولك.</p>
+          <p className="text-surface-500 mb-6">لإضافة كلمة جديدة، أنشئ حساباً أو سجل دخول.</p>
           <a href="/auth/login" className="btn-primary">تسجيل الدخول</a>
         </div>
       </div>
