@@ -11,9 +11,9 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '/', label: 'الرئيسية', icon: BookOpen },
-    { href: '/search', label: 'البحث', icon: Search },
-    ...(user ? [{ href: '/add', label: 'إضافة كلمة', icon: PlusCircle }] : []),
-    ...(user?.role === 'admin' ? [{ href: '/moderation', label: 'الإشراف', icon: Shield }] : []),
+    { href: '/search', label: 'بحث', icon: Search },
+    ...(user ? [{ href: '/add', label: 'أضف كلمة', icon: PlusCircle }] : []),
+    ...(user?.role === 'admin' ? [{ href: '/moderation', label: 'لوحة المشرفين', icon: Shield }] : []),
   ];
 
   return (
@@ -26,7 +26,7 @@ export default function Navbar() {
               <span className="text-white font-bold text-lg">م</span>
             </div>
             <span className="text-xl font-bold bg-gradient-to-l from-primary-600 to-accent-600 bg-clip-text text-transparent">
-              المعجم الشامل
+              المُعجَم الشامِل
             </span>
           </Link>
 
