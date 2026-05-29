@@ -13,10 +13,10 @@ export default function AddWordPage() {
   const [form, setForm] = useState({
     word: '',
     slug: '',
+    word_rype: '',
     meaning: '',
     root: '',
-    synonyms: '',
-    country: '',
+    part_of_speech: '',
     state: '',
     city: '',
     region: '',
@@ -61,10 +61,10 @@ export default function AddWordPage() {
       const formData = new FormData();
       formData.append('word', form.word);
       formData.append('slug', form.slug);
+      formData.append('word_rype', form.word_rype);
       formData.append('meaning', form.meaning);
       formData.append('root', form.root);
-      formData.append('synonyms', form.synonyms);
-      formData.append('country', form.country);
+      formData.append('part_of_speech', form.part_of_speech);
       formData.append('state', form.state);
       formData.append('city', form.city);
       formData.append('region', form.region);
@@ -82,7 +82,7 @@ export default function AddWordPage() {
 
       if (res.ok) {
         setSuccess(true);
-        setForm({ word: '', type: 'معنى', meaning: '', root: '', synonyms: '', country: '', state: '', city: '', region: '', notes: '' });
+        setForm({ word: '', slug: 'معنى', word_rype: '', meaning: '', root: '', part_of_speech: '', state: '', city: '', region: '', notes: '' });
         setAudioBlob(null);
         setAudioUrl('');
       } else {
