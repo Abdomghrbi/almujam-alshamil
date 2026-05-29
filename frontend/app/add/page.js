@@ -210,6 +210,15 @@ export default function AddWordPage() {
           <LocationPicker onChange={handleLocationChange} />
         </div>
 
+        {/* Audio Recording */}
+        <div className="card !p-4">
+          <h3 className="font-bold text-surface-700 dark:text-surface-300 mb-3 flex items-center gap-2">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 10v2a6 6 0 0012 0v-2" /></svg>
+            تسجيل صوتي (اختياري)
+          </h3>
+          <AudioRecorder />
+        </div>
+
         {/* Notes */}
         <div>
           <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">ملاحظات إضافية (اختياري)</label>
