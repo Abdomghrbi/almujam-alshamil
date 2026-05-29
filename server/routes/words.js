@@ -9,7 +9,7 @@ router.post('/', authenticateToken, upload.none(), async (req, res) => {
   try {
     const {
       word,
-      word_type,
+      type,
       meaning,
       root,
       part_of_speech,
