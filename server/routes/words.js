@@ -1,15 +1,13 @@
 const express = require('express');
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
 const router = express.Router();
 const { authenticateToken } = require('../middleware/auth');
 
 // POST /api/words — إضافة كلمة جديدة
-router.post('/', authenticateToken, upload.none(), async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
     const {
       word,
-      type,
+      word_type,
       meaning,
       root,
       part_of_speech,
@@ -30,7 +28,7 @@ router.post('/', authenticateToken, upload.none(), async (req, res) => {
        ON CONFLICT (language, country, COALESCE(state,''), COALESCE(city,''), COALESCE(district,''))
        DO UPDATE SET language = EXCLUDED.language
        RETURNING id`,
-      [language || 'العربية', country, state, city, district]
+      [language || 'العربية', country, state || null, city || null, district || null]
     );
     const location_id = locationResult.rows[0].id;
 
@@ -42,7 +40,7 @@ router.post('/', authenticateToken, upload.none(), async (req, res) => {
       `INSERT INTO words (word, slug, word_type, meaning, root, part_of_speech, pronunciation, contributor_id, location_id, status)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'pending')
        RETURNING id, word, slug, word_type, meaning, status, created_at`,
-      [word, slug, word_type || 'معنى', meaning, root, part_of_speech, pronunciation, req.user.id, location_id]
+      [word, slug, word_type || 'معنى', meaning, root || null, part_of_speech || null, pronunciation || null, req.user.id, location_id]
     );
 
     res.status(201).json({

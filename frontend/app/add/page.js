@@ -12,18 +12,17 @@ export default function AddWordPage() {
   const router = useRouter();
   const [form, setForm] = useState({
     word: '',
-    slug: '',
-    word_rype: '',
+    word_type: 'معنى',
     meaning: '',
     root: '',
     part_of_speech: '',
     pronunciation: '',
+    country: '',
+    state: '',
     city: '',
-    region: '',
+    district: '',
     notes: '',
   });
-  const [audioBlob, setAudioBlob] = useState(null);
-  const [audioUrl, setAudioUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -48,43 +47,50 @@ export default function AddWordPage() {
     setForm({ ...form, ...location });
   };
 
-  const handleAudioRecorded = (blob, url) => {
-    setAudioBlob(blob);
-    setAudioUrl(url);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      const formData = new FormData();
-      formData.append('word', form.word);
-      formData.append('slug', form.slug);
-      formData.append('word_rype', form.word_rype);
-      formData.append('meaning', form.meaning);
-      formData.append('root', form.root);
-      formData.append('part_of_speech', form.part_of_speech);
-      formData.append('pronunciation', form.pronunciation);
-      formData.append('city', form.city);
-      formData.append('region', form.region);
-      formData.append('notes', form.notes);
-      if (audioBlob) {
-        formData.append('audio', audioBlob, 'recording.webm');
-      }
+      const body = {
+        word: form.word,
+        word_type: form.word_type,
+        meaning: form.meaning,
+        root: form.root || null,
+        part_of_speech: form.part_of_speech || null,
+        pronunciation: form.pronunciation || null,
+        language: 'العربية',
+        country: form.country,
+        state: form.state || null,
+        city: form.city || null,
+        district: form.district || null,
+      };
 
       const token = localStorage.getItem('token');
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/words`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
       });
 
       if (res.ok) {
         setSuccess(true);
-        setForm({ word: '', slug: 'معنى', word_rype: '', meaning: '', root: '', part_of_speech: '', state: '', city: '', region: '', notes: '' });
-        setAudioBlob(null);
-        setAudioUrl('');
+        setForm({
+          word: '',
+          word_type: 'معنى',
+          meaning: '',
+          root: '',
+          part_of_speech: '',
+          pronunciation: '',
+          country: '',
+          state: '',
+          city: '',
+          district: '',
+          notes: '',
+        });
       } else {
         const data = await res.json();
         alert(data.error || 'حدث خطأ أثناء الإرسال');
@@ -138,7 +144,7 @@ export default function AddWordPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">النوع *</label>
-            <select value={form.type} onChange={(e) => handleChange('type', e.target.value)} className="input-field">
+            <select value={form.word_type} onChange={(e) => handleChange('word_type', e.target.value)} className="input-field">
               {types.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
           </div>
@@ -157,7 +163,7 @@ export default function AddWordPage() {
           />
         </div>
 
-        {/* Root + Synonyms */}
+        {/* Root + Pronunciation */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">الجذر (إن وجد)</label>
@@ -165,17 +171,31 @@ export default function AddWordPage() {
               type="text"
               value={form.root}
               onChange={(e) => handleChange('root', e.target.value)}
-              placeholder=" مثال: كَتَبَ، فَعَلَ.."
+              placeholder=" مثال: ك ت ب"
               className="input-field"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">مرادفات (مفصولة بفاصلة)</label>
+            <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">النطق (اختياري)</label>
             <input
               type="text"
-              value={form.synonyms}
-              onChange={(e) => handleChange('synonyms', e.target.value)}
-              placeholder="مثال: فعل، فاعل، مفعول به"
+              value={form.pronunciation}
+              onChange={(e) => handleChange('pronunciation', e.target.value)}
+              placeholder="مثال: /ka'taba/"
+              className="input-field"
+            />
+          </div>
+        </div>
+
+        {/* Part of speech */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">القسم (اختياري)</label>
+            <input
+              type="text"
+              value={form.part_of_speech}
+              onChange={(e) => handleChange('part_of_speech', e.target.value)}
+              placeholder="اسم / فعل / حرف …"
               className="input-field"
             />
           </div>
@@ -188,16 +208,6 @@ export default function AddWordPage() {
             الموقع الجغرافي للكلمة *
           </h3>
           <LocationPicker onChange={handleLocationChange} />
-        </div>
-
-        {/* Audio */}
-        <div className="card !p-4">
-          <h3 className="font-bold text-surface-700 dark:text-surface-300 mb-3 flex items-center gap-2">
-            <Mic size={18} className="text-accent-500" />
-            التسجيل الصوتي *
-          </h3>
-          <p className="text-sm text-surface-500 mb-3">سجّل لفظ الكلمة بصوتك (مطلوب)</p>
-          <AudioRecorder onRecorded={handleAudioRecorded} />
         </div>
 
         {/* Notes */}

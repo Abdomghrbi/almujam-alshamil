@@ -299,7 +299,7 @@ export default function LocationPicker({ onChange }) {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedState, setSelectedState] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
-  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState('');
 
   const countries = Object.keys(locationData).sort();
   const states = selectedCountry ? Object.keys(locationData[selectedCountry].states) : [];
@@ -309,29 +309,29 @@ export default function LocationPicker({ onChange }) {
     setSelectedCountry(country);
     setSelectedState('');
     setSelectedCity('');
-    setSelectedRegion('');
+    setSelectedDistrict('');
     emitChange(country, '', '', '');
   };
 
   const handleStateChange = (state) => {
     setSelectedState(state);
     setSelectedCity('');
-    setSelectedRegion('');
+    setSelectedDistrict('');
     emitChange(selectedCountry, state, '', '');
   };
 
   const handleCityChange = (city) => {
     setSelectedCity(city);
-    emitChange(selectedCountry, selectedState, city, selectedRegion);
+    emitChange(selectedCountry, selectedState, city, selectedDistrict);
   };
 
-  const handleRegionChange = (region) => {
-    setSelectedRegion(region);
-    emitChange(selectedCountry, selectedState, selectedCity, region);
+  const handleDistrictChange = (district) => {
+    setSelectedDistrict(district);
+    emitChange(selectedCountry, selectedState, selectedCity, district);
   };
 
-  const emitChange = (country, state, city, region) => {
-    onChange({ country, state, city, region });
+  const emitChange = (country, state, city, district) => {
+    onChange({ country, state, city, district });
   };
 
   return (
@@ -364,8 +364,8 @@ export default function LocationPicker({ onChange }) {
         <label className="block text-xs font-medium text-surface-500 mb-1">المنطقة (اختياري)</label>
         <input
           type="text"
-          value={selectedRegion}
-          onChange={(e) => handleRegionChange(e.target.value)}
+          value={selectedDistrict}
+          onChange={(e) => handleDistrictChange(e.target.value)}
           placeholder="الحي / القرية"
           className="input-field !py-2 !text-sm"
         />

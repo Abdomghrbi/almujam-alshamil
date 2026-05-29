@@ -28,9 +28,7 @@ export const wordsAPI = {
   search: (params) => api.get('/api/search', { params }),
   suggest: (q) => api.get('/api/search/suggest', { params: { q } }),
   get: (word) => api.get(`/api/words/${encodeURIComponent(word)}`),
-  create: (formData) => api.post('/api/words', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  }),
+  create: (data) => api.post('/api/words', data),
 };
 
 export const moderationAPI = {
