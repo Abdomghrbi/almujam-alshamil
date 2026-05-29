@@ -33,8 +33,10 @@ export default function RootLayout({ children }) {
       })
         .then(res => res.ok ? res.json() : null)
         .then(data => { if (data) setUser(data.user); })
-        .catch(() => {  setUser(null);});
-        
+        .catch(() => {
+          setUser(null);
+        });
+    }
   }, []);
 
   const toggleDarkMode = () => {
