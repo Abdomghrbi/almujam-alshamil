@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// GET /api/search?q=كلمة&country=&type=
+// GET /api/search?q=كلمة
 router.get('/', async (req, res) => {
   try {
     const { q, country, type, page = 1, limit = 20 } = req.query;
