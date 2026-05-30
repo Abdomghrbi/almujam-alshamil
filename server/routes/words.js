@@ -16,7 +16,8 @@ router.post('/', authenticateToken, async (req, res) => {
       country,
       state,
       city,
-      district
+      district,
+      audioBase64
     } = req.body;
 
     const pool = req.app.locals.pool;
@@ -42,6 +43,14 @@ router.post('/', authenticateToken, async (req, res) => {
        RETURNING id, word, slug, word_type, meaning, status, created_at`,
       [word, slug, word_type || 'معنى', meaning, root || null, part_of_speech || null, pronunciation || null, req.user.id, location_id]
     );
+
+    // 4. حفظ التسجيل الصوتي إن وجد
+    if (audioBase64) {
+      await pool.query(
+        `INSERT INTO audio_clips (word_id, file_url, file_format) VALUES ($1, $2, 'webm')`,
+        [wordResult.rows[0].id, audioBase64]
+      );
+    }
 
     res.status(201).json({
       message: 'تم إضافة الكلمة وهي قيد المراجعة',
