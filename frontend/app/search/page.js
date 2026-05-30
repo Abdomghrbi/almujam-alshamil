@@ -35,7 +35,7 @@ export default function SearchPage() {
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/search?${params}`);
       const data = await res.json();
-      setResults(data.results || []);
+      setResults(data.words || []);
     } catch (err) {
       console.error('Search error:', err);
       setResults([]);
