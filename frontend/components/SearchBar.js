@@ -20,7 +20,7 @@ export default function SearchBar({ initialQuery = '', onSearch }) {
           setSuggestions(data.suggestions || []);
           setShowSuggestions(true);
         } catch (err) {
-          // ignore
+        
         }
       }, 300);
     } else {
@@ -70,7 +70,7 @@ export default function SearchBar({ initialQuery = '', onSearch }) {
         )}
       </div>
 
-      {/* Suggestions dropdown */}
+      {/* قائمة الاقتراحات المنسدلة */}
       {showSuggestions && suggestions.length > 0 && (
         <div className="absolute top-full mt-2 w-full bg-white dark:bg-surface-800 rounded-2xl shadow-xl border border-surface-200 dark:border-surface-700 overflow-hidden z-50">
           {suggestions.map((s, i) => (
