@@ -87,10 +87,9 @@ if (locationResult.rows.length > 0) {
 // توليد slug
 // ============================================
 
-const slug =
-  word.trim().replace(/\s+/g, '-').toLowerCase() +
-  '-' +
-  Date.now();
+const slugBase = word.trim().replace(/\s+/g, '-').toLowerCase();
+
+const slug = `${slugBase}-${location_id}-${Date.now()}`;
 
 // ============================================
 // إضافة الكلمة
