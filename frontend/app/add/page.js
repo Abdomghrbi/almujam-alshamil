@@ -48,59 +48,71 @@ export default function AddWordPage() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
+  e.preventDefault();
+  setSubmitting(true);
 
-    try {
-      const body = {
-        word: form.word,
-        word_type: form.word_type,
-        meaning: form.meaning,
-        root: form.root || null,
-        part_of_speech: form.part_of_speech || null,
-        pronunciation: form.pronunciation || null,
-        language: 'العربية',
-        country: form.country,
-        state: form.state || null,
-        city: form.city || null,
-        district: form.district || null,
-      };
+  try {
+    const body = {
+      word: form.word,
+      word_type: form.word_type,
+      meaning: form.meaning,
+      root: form.root || null,
+      part_of_speech: form.part_of_speech || null,
+      pronunciation: form.pronunciation || null,
 
-      const token = localStorage.getItem('token');
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/words`, {
+      // location (ضروري)
+      country: form.country,
+      state: form.state || null,
+      city: form.city || null,
+      district: form.district || null,
+
+      // audio (إذا عم تستخدمه)
+      audioBase64: form.audioBase64 || null
+    };
+
+    const token = localStorage.getItem('token');
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/words`,
+      {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(body),
-      });
-
-      if (res.ok) {
-        setSuccess(true);
-        setForm({
-          word: '',
-          word_type: 'معنى',
-          meaning: '',
-          root: '',
-          part_of_speech: '',
-          pronunciation: '',
-          country: '',
-          state: '',
-          city: '',
-          district: '',
-          notes: '',
-        });
-      } else {
-        const data = await res.json();
-        alert(data.error || 'حدث خطأ أثناء الإرسال');
       }
-    } catch (err) {
-      alert('فشل الاتصال بالخادم');
-    } finally {
-      setSubmitting(false);
+    );
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setSuccess(true);
+
+      setForm({
+        word: '',
+        word_type: 'معنى',
+        meaning: '',
+        root: '',
+        part_of_speech: '',
+        pronunciation: '',
+        country: '',
+        state: '',
+        city: '',
+        district: '',
+        notes: '',
+        audioBase64: null
+      });
+    } else {
+      alert(data.error || 'حدث خطأ أثناء الإرسال');
     }
-  };
+
+  } catch (err) {
+    alert('فشل الاتصال بالخادم');
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   if (success) {
     return (
