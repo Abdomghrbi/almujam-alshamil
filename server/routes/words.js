@@ -37,7 +37,6 @@ if (!word || !meaning || !country) {
 // ============================================
 // إيجاد أو إنشاء الموقع
 // ============================================
-
 let locationResult = await pool.query(
   `
   SELECT id
@@ -57,6 +56,10 @@ let locationResult = await pool.query(
 );
 
 let location_id;
+
+// ============================================
+// 1. Get or Create Location
+// ============================================
 
 if (locationResult.rows.length > 0) {
   location_id = locationResult.rows[0].id;
@@ -82,6 +85,76 @@ if (locationResult.rows.length > 0) {
 
   location_id = insertLocation.rows[0].id;
 }
+
+// ============================================
+// 2. CHECK DUPLICATE BEFORE INSERT
+// ============================================
+
+const duplicateCheck = await pool.query(
+  `
+  SELECT id
+  FROM words
+  WHERE word = $1
+    AND location_id = $2
+    AND meaning = $3
+    AND word_type = $4
+  LIMIT 1
+  `,
+  [
+    word,
+    location_id,
+    meaning,
+    word_type || 'كلمة'
+  ]
+);
+
+if (duplicateCheck.rows.length > 0) {
+  return res.status(400).json({
+    error: 'هذه الكلمة موجودة مسبقاً بنفس المعنى والموقع'
+  });
+}
+
+// ============================================
+// 3. Generate slug (Option A rule)
+// ============================================
+
+const slugBase = word.trim().replace(/\s+/g, '-').toLowerCase();
+
+const slug = `${slugBase}-${location_id}-${Date.now()}`;
+
+// ============================================
+// 4. Continue with INSERT (words)
+// ============================================
+
+const wordResult = await pool.query(
+  `
+  INSERT INTO words (
+    word,
+    slug,
+    word_type,
+    meaning,
+    root,
+    part_of_speech,
+    pronunciation,
+    contributor_id,
+    location_id,
+    status
+  )
+  VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'pending')
+  RETURNING id, word, slug, word_type, meaning, status, created_at
+  `,
+  [
+    word,
+    slug,
+    word_type || 'كلمة',
+    meaning,
+    root || null,
+    part_of_speech || null,
+    pronunciation || null,
+    req.user.id,
+    location_id
+  ]
+);
 
 // ============================================
 // توليد slug
