@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { BookOpen, MapPin, Mic, Hash, ArrowRight } from 'lucide-react';
+import { BookOpen, MapPin, Mic, Hash } from 'lucide-react';
 
 export default function WordDetailPage() {
   const params = useParams();
@@ -53,23 +53,38 @@ export default function WordDetailPage() {
 
   if (!wordData) return null;
 
+  const audioSource = wordData.audio_clips?.[0]?.file_url || wordData.audioUrl || '';
+
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="card">
         <div className="flex items-start justify-between mb-4">
           <div>
             <h1 className="text-3xl font-bold text-surface-900 dark:text-white mb-1">{wordData.word}</h1>
-            <span className={`badge ${wordData.type === 'لهجة' ? 'badge-accent' : 'badge-primary'}`}>
-              {wordData.word_type || wordData.type || 'مفردة'}
+            <span className={`badge ${wordData.word_type === 'لهجة' ? 'badge-accent' : 'badge-primary'}`}>
+              {wordData.word_type || 'كلمة'}
             </span>
           </div>
         </div>
 
         <div className="space-y-4">
+          {wordData.language && (
+            <div className="flex items-center gap-2 text-sm text-surface-600 dark:text-surface-400">
+              <span>اللغة: <strong>{wordData.language}</strong></span>
+            </div>
+          )}
+
           <div>
             <h3 className="text-sm font-medium text-surface-500 mb-1">المعنى</h3>
             <p className="text-surface-800 dark:text-surface-200 text-lg leading-relaxed">{wordData.meaning}</p>
           </div>
+
+          {wordData.example_usage && (
+            <div>
+              <h3 className="text-sm font-medium text-surface-500 mb-1">مثال استخدام</h3>
+              <p className="text-surface-700 dark:text-surface-300 leading-relaxed">{wordData.example_usage}</p>
+            </div>
+          )}
 
           {wordData.root && (
             <div className="flex items-center gap-2 text-sm text-surface-600 dark:text-surface-400">
@@ -96,10 +111,10 @@ export default function WordDetailPage() {
             </div>
           )}
 
-          {wordData.audioUrl && (
+          {audioSource && (
             <div className="mt-4">
               <h3 className="text-sm font-medium text-surface-500 mb-2">التسجيل الصوتي</h3>
-              <audio src={wordData.audioUrl} controls className="w-full" />
+              <audio src={audioSource} controls className="w-full" />
             </div>
           )}
         </div>
