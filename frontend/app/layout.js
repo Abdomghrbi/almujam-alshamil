@@ -17,26 +17,37 @@ export default function RootLayout({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load theme preference
-    const storedTheme = localStorage.getItem('theme');
-    if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      setDarkMode(true);
-      document.documentElement.classList.add('dark');
-    }
-    setLoading(false);
+    const initialize = async () => {
+      // Load theme preference
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        setDarkMode(true);
+        document.documentElement.classList.add('dark');
+      }
 
-    // Check auth token
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(res => res.ok ? res.json() : null)
-        .then(data => { if (data) setUser(data.user); })
-        .catch(() => {
+      // Check auth token
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/auth/me`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            setUser(data.user);
+          } else {
+            setUser(null);
+          }
+        } catch (err) {
           setUser(null);
-        });
-    }
+        }
+      }
+
+      setLoading(false);
+    };
+
+    initialize();
   }, []);
 
   const toggleDarkMode = () => {
@@ -71,7 +82,7 @@ export default function RootLayout({ children }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>المعجم الشامل — موسوعة اللهجات والمفردات العربية</title>
-        <meta name="description" content="المعجم الشامل هو قاموس مفتوح المصدر يوثّق الكلمات العربية الفُصحىٰ واللهجات المتنوعة مع تسجيلات صوتية حقيقية." />
+        <meta name="description" content="المعجم الشامل هو قاموس مفتوح المصدر يوثّق الكلمات العربية الفُصحى واللهجات المتنوعة مع تسجيلات صوتية حقيقية." />
         <meta name="theme-color" content="#4c6ef5" />
         <link rel="icon" href="/favicon.ico" />
       </head>
