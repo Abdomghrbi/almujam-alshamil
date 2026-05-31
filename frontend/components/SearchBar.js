@@ -20,7 +20,8 @@ export default function SearchBar({ initialQuery = '', onSearch }) {
           setSuggestions(data.suggestions || []);
           setShowSuggestions(true);
         } catch (err) {
-        
+          setSuggestions([]);
+          setShowSuggestions(false);
         }
       }, 300);
     } else {
@@ -38,8 +39,9 @@ export default function SearchBar({ initialQuery = '', onSearch }) {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    setQuery(suggestion);
-    onSearch(suggestion);
+    const value = suggestion.slug || suggestion.word || suggestion;
+    setQuery(value);
+    onSearch(value);
     setShowSuggestions(false);
   };
 
@@ -77,11 +79,11 @@ export default function SearchBar({ initialQuery = '', onSearch }) {
             <button
               key={i}
               type="button"
-              onClick={() => handleSuggestionClick(s.word || s)}
+              onClick={() => handleSuggestionClick(s)}
               className="w-full text-right px-4 py-3 hover:bg-surface-50 dark:hover:bg-surface-700 transition-colors border-b border-surface-100 dark:border-surface-700 last:border-0"
             >
-              <span className="font-medium text-surface-800 dark:text-white">{s.word || s}</span>
-              {s.type && <span className="badge-primary mr-2 text-xs">{s.type}</span>}
+              <span className="font-medium text-surface-800 dark:text-white">{s.word || s.slug || s}</span>
+              {s.word_type && <span className="badge-primary mr-2 text-xs">{s.word_type}</span>}
               {s.country && <span className="text-xs text-surface-400 mr-2">📌 {s.country}</span>}
             </button>
           ))}
