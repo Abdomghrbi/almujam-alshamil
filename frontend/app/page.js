@@ -2,8 +2,11 @@
 
 import Link from 'next/link';
 import { Search, BookOpen, Mic, Globe2, Users, ArrowLeft, Sparkles } from 'lucide-react';
+import { useAuth } from './layout';
 
 export default function HomePage() {
+  const { user } = useAuth();
+
   const stats = [
     { icon: BookOpen, label: 'كلمة موثقة', value: '—', color: 'from-primary-500 to-primary-600' },
     { icon: Mic, label: 'تسجيل صوتي', value: '—', color: 'from-accent-500 to-accent-600' },
@@ -59,10 +62,18 @@ export default function HomePage() {
               <Search size={18} className="inline ml-2" />
               استكشف المعجم
             </Link>
-            <Link href="/add" className="btn-outline !px-8 !py-3 !text-base">
-              <Mic size={18} className="inline ml-2" />
-              ساهم بكلمة
-            </Link>
+
+            {user ? (
+              <Link href="/add" className="btn-outline !px-8 !py-3 !text-base">
+                <Mic size={18} className="inline ml-2" />
+                ساهم بكلمة
+              </Link>
+            ) : (
+              <Link href="/auth/register" className="btn-outline !px-8 !py-3 !text-base">
+                <Mic size={18} className="inline ml-2" />
+                أنشئ حسابك مجاناً
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -144,12 +155,13 @@ export default function HomePage() {
             كل كلمة توثّقها هي لبنة في صرح لغتنا. ساهم الآن!
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            <Link href="/auth/register" className="bg-white text-primary-700 font-bold px-8 py-3 rounded-xl hover:bg-white/90 transition-all shadow-lg">
-              أنشئ حسابك مجاناً
+            <Link href="/search" className="bg-white text-primary-700 font-bold px-8 py-3 rounded-xl hover:bg-white/90 transition-all shadow-lg">
+              <Search size={18} className="inline ml-2" />
+              استكشف الكلمات
             </Link>
             <a href="https://github.com/Abdomghrbi/almujam-alshamil" target="_blank" rel="noopener noreferrer" className="border-2 border-white/40 text-white hover:bg-white/10 font-medium px-8 py-3 rounded-xl transition-all">
               <ArrowLeft size={18} className="inline ml-2" />
-              شاهد الكود المصدري
+              شاهد الكود المصدر
             </a>
           </div>
         </div>
