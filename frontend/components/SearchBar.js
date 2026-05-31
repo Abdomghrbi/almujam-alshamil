@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search, X } from 'lucide-react';
 
 export default function SearchBar({ initialQuery = '', onSearch }) {
+  const router = useRouter();
   const [query, setQuery] = useState(initialQuery);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -40,9 +42,10 @@ export default function SearchBar({ initialQuery = '', onSearch }) {
 
   const handleSuggestionClick = (suggestion) => {
     const value = suggestion.word || suggestion.slug || suggestion;
-    setQuery(value);
-    onSearch(value);
+    const detailPath = `/search/${encodeURIComponent(value)}`;
+    setQuery(suggestion.word || suggestion.slug || suggestion);
     setShowSuggestions(false);
+    router.push(detailPath);
   };
 
   return (
