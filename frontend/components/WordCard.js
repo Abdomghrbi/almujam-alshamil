@@ -9,7 +9,7 @@ export default function WordCard({ word }) {
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-2">
           <h3 className="text-xl font-bold text-surface-800 dark:text-white">{word.word}</h3>
-          <span className={`badge ${word.word_type === 'لهجة' ? 'badge-accent' : 'badge-primary'}`}>{word.word_type || 'كلمة'}</span>
+          <span className={`badge ${word.word_type === 'كنية' ? 'badge-accent' : 'badge-primary'}`}>{word.word_type || 'كلمة'}</span>
         </div>
         <ArrowLeft size={18} className="text-surface-400 shrink-0 mt-1" />
       </div>
