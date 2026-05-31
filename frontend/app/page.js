@@ -60,7 +60,7 @@ export default function HomePage() {
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <Link href="/search" className="btn-primary !px-8 !py-3 !text-base">
               <Search size={18} className="inline ml-2" />
-              استكشف المعجم
+              استكشف الكلمات
             </Link>
 
             {user ? (
