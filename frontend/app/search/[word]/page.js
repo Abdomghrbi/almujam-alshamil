@@ -54,6 +54,11 @@ export default function WordDetailPage() {
   if (!wordData) return null;
 
   const audioSource = wordData.audio_clips?.[0]?.file_url || wordData.audioUrl || '';
+  const playableAudio = audioSource
+    ? (audioSource.startsWith('data:') || audioSource.startsWith('http')
+      ? audioSource
+      : `data:audio/webm;base64,${audioSource}`)
+    : '';
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -111,10 +116,10 @@ export default function WordDetailPage() {
             </div>
           )}
 
-          {audioSource && (
+          {playableAudio && (
             <div className="mt-4">
               <h3 className="text-sm font-medium text-surface-500 mb-2">التسجيل الصوتي</h3>
-              <audio src={audioSource} controls className="w-full" />
+              <audio src={playableAudio} controls className="w-full" />
             </div>
           )}
         </div>
