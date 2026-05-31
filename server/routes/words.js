@@ -10,8 +10,10 @@ router.post('/', authenticateToken, async (req, res) => {
   try {
     const {
       word,
+      language,
       word_type,
       meaning,
+      example_usage,
       root,
       part_of_speech,
       pronunciation,
@@ -35,7 +37,9 @@ router.post('/', authenticateToken, async (req, res) => {
 
     const normalizedWord = word.trim();
     const normalizedMeaning = meaning.trim();
+    const normalizedLanguage = language?.trim() || 'العربية';
     const normalizedType = word_type || 'كلمة';
+    const normalizedExample = example_usage?.trim() || null;
 
     // ============================================
     // 2. Get or Create Location
@@ -113,7 +117,7 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 
     // ============================================
-    // 4. Slug Generation (Option A)
+    // 4. Slug Generation
     // ============================================
     const slugBase = normalizedWord
       .toLowerCase()
@@ -130,8 +134,10 @@ router.post('/', authenticateToken, async (req, res) => {
       INSERT INTO words (
         word,
         slug,
+        language,
         word_type,
         meaning,
+        example_usage,
         root,
         part_of_speech,
         pronunciation,
@@ -139,21 +145,28 @@ router.post('/', authenticateToken, async (req, res) => {
         location_id,
         status
       )
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'pending')
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,'pending')
       RETURNING
         id,
         word,
         slug,
+        language,
         word_type,
         meaning,
+        example_usage,
+        root,
+        part_of_speech,
+        pronunciation,
         status,
         created_at
       `,
       [
         normalizedWord,
         slug,
+        normalizedLanguage,
         normalizedType,
         normalizedMeaning,
+        normalizedExample,
         root || null,
         part_of_speech || null,
         pronunciation || null,
@@ -173,11 +186,12 @@ router.post('/', authenticateToken, async (req, res) => {
         INSERT INTO audio_clips (
           word_id,
           file_url,
-          file_format
+          file_format,
+          uploaded_by
         )
-        VALUES ($1,$2,'webm')
+        VALUES ($1,$2,'webm',$3)
         `,
-        [createdWord.id, audioBase64]
+        [createdWord.id, audioBase64, req.user.id]
       );
     }
 
@@ -199,11 +213,12 @@ router.post('/', authenticateToken, async (req, res) => {
 
 /**
  * GET /api/words/:id
- * جلب كلمة واحدة
+ * جلب كلمة واحدة (by id, slug, or word)
  */
 router.get('/:id', async (req, res) => {
   try {
     const pool = req.app.locals.pool;
+    const identifier = req.params.id;
 
     const result = await pool.query(
       `
@@ -213,14 +228,22 @@ router.get('/:id', async (req, res) => {
         l.state,
         l.city,
         l.district,
-        u.username AS contributor_name
+        u.username AS contributor_name,
+        EXISTS (
+          SELECT 1
+          FROM audio_clips ac
+          WHERE ac.word_id = w.id
+        ) AS has_audio
       FROM words w
       LEFT JOIN locations l ON w.location_id = l.id
       LEFT JOIN users u ON w.contributor_id = u.id
-      WHERE w.id = $1
-        AND w.status = 'approved'
+      WHERE w.id::text = $1
+         OR w.slug = $1
+         OR LOWER(w.word) = LOWER($1)
+      ORDER BY w.created_at DESC
+      LIMIT 1
       `,
-      [req.params.id]
+      [identifier]
     );
 
     if (result.rows.length === 0) {
@@ -235,11 +258,14 @@ router.get('/:id', async (req, res) => {
         id,
         file_url,
         file_format,
-        duration_seconds
+        duration_seconds,
+        uploaded_by,
+        created_at
       FROM audio_clips
       WHERE word_id = $1
+      ORDER BY created_at ASC
       `,
-      [req.params.id]
+      [result.rows[0].id]
     );
 
     res.json({
