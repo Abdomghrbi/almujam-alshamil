@@ -76,7 +76,7 @@ export default function ModerationPage() {
       {pendingWords.length === 0 ? (
         <div className="text-center py-16 card">
           <Check size={48} className="mx-auto mb-4 text-emerald-400" />
-          <p className="text-surface-500 text-lg">لا توجد كلمات بانتظار المراجعة. مبروك! 🎉</p>
+          <p className="text-surface-500 text-lg">لا توجد كلمات بانتظار المراجعة.</p>
         </div>
       ) : (
         <div className="space-y-4">
