@@ -237,7 +237,14 @@ router.get('/:id', async (req, res) => {
           SELECT 1
           FROM audio_clips ac
           WHERE ac.word_id = w.id
-        ) AS has_audio
+        ) AS has_audio,
+        (
+          SELECT ac.file_url
+          FROM audio_clips ac
+          WHERE ac.word_id = w.id
+          ORDER BY ac.created_at ASC
+          LIMIT 1
+        ) AS audio_url
       FROM words w
       LEFT JOIN locations l ON w.location_id = l.id
       LEFT JOIN users u ON w.contributor_id = u.id
