@@ -18,12 +18,36 @@ export default function WordDetailPage() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/words/${encodeURIComponent(word)}`
-      );
-      if (!res.ok) throw new Error('لم يتم العثور على الكلمة');
-      const data = await res.json();
-      setWordData(data.word || data);
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com';
+      const identifier = decodeURIComponent(word);
+
+      const detailRes = await fetch(`${apiBase}/api/words/${encodeURIComponent(identifier)}`);
+      if (detailRes.ok) {
+        const data = await detailRes.json();
+        setWordData(data.word || data);
+        return;
+      }
+
+      // Fallback: search endpoint, then pick the matching entry client-side
+      const searchRes = await fetch(`${apiBase}/api/search?q=${encodeURIComponent(identifier)}`);
+      if (searchRes.ok) {
+        const searchData = await searchRes.json();
+        const results = searchData.words || [];
+        const normalized = identifier.toLowerCase();
+
+        const match = results.find((item) => {
+          const wordValue = (item.word || '').toLowerCase();
+          const slugValue = (item.slug || '').toLowerCase();
+          return wordValue === normalized || slugValue === normalized || slugValue === identifier || wordValue === identifier.toLowerCase();
+        });
+
+        if (match) {
+          setWordData(match);
+          return;
+        }
+      }
+
+      throw new Error('لم يتم العثور على الكلمة');
     } catch (err) {
       setError(err.message);
     } finally {
