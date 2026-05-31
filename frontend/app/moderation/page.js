@@ -85,20 +85,27 @@ export default function ModerationPage() {
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <h3 className="text-xl font-bold text-surface-800 dark:text-white">{word.word}</h3>
-                  <span className="text-sm text-surface-500">بواسطة @{word.addedBy} — {new Date(word.createdAt).toLocaleDateString('ar-SA')}</span>
+                  <span className="text-sm text-surface-500">
+                    بواسطة @{word.contributor_name || '—'} — {word.created_at ? new Date(word.created_at).toLocaleDateString('ar-SA') : ''}
+                  </span>
                 </div>
-                <span className={`badge ${word.type === 'لهجة' ? 'badge-accent' : 'badge-primary'}`}>{word.type}</span>
+                <span className={`badge ${word.word_type === 'كنية' ? 'badge-accent' : 'badge-primary'}`}>{word.word_type}</span>
+              </div>
+
+              <div className="flex items-center gap-3 text-sm text-surface-500 mb-3 flex-wrap">
+                {word.language && <span>اللغة: {word.language}</span>}
+                {word.has_audio && <span className="flex items-center gap-1"><Mic size={14} /> يوجد تسجيل صوتي</span>}
               </div>
 
               <p className="text-surface-600 dark:text-surface-400 mb-3">{word.meaning}</p>
 
+              {word.example_usage && <div className="text-sm text-surface-500 mb-2">مثال: {word.example_usage}</div>}
               {word.root && <div className="text-sm text-surface-500 mb-2">الجذر: {word.root}</div>}
-
-              {word.synonyms && <div className="text-sm text-surface-500 mb-3">مرادفات: {word.synonyms}</div>}
+              {word.part_of_speech && <div className="text-sm text-surface-500 mb-2">القسم: {word.part_of_speech}</div>}
+              {word.pronunciation && <div className="text-sm text-surface-500 mb-3">النطق: {word.pronunciation}</div>}
 
               <div className="flex items-center gap-4 text-sm text-surface-400 mb-4">
                 {word.country && <span className="flex items-center gap-1"><MapPin size={14} /> {word.country}{word.state ? ` / ${word.state}` : ''}{word.city ? ` / ${word.city}` : ''}</span>}
-                {word.hasAudio && <span className="flex items-center gap-1"><Mic size={14} /> يوجد تسجيل صوتي</span>}
               </div>
 
               <div className="flex items-center gap-3">
