@@ -39,7 +39,7 @@ export default function SearchBar({ initialQuery = '', onSearch }) {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    const value = suggestion.slug || suggestion.word || suggestion;
+    const value = suggestion.word || suggestion.slug || suggestion;
     setQuery(value);
     onSearch(value);
     setShowSuggestions(false);
