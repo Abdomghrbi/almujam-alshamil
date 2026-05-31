@@ -132,4 +132,4 @@ psql -d almujam_shamil -f docs/schema.sql
 
 ---
 
-**Made with ❤️ by Abd (@Abdomghrbi)**
+**Made with ❤️**
