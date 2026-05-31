@@ -24,7 +24,11 @@ export default function WordDetailPage() {
       const detailRes = await fetch(`${apiBase}/api/words/${encodeURIComponent(identifier)}`);
       if (detailRes.ok) {
         const data = await detailRes.json();
-        setWordData(data.word || data);
+        setWordData({
+          ...(data.word || data),
+          audio_clips: data.audio_clips || [],
+          audio_url: data.word?.audio_url || data.audio_url || ''
+        });
         return;
       }
 
@@ -77,7 +81,7 @@ export default function WordDetailPage() {
 
   if (!wordData) return null;
 
-  const audioSource = wordData.audio_clips?.[0]?.file_url || wordData.audioUrl || '';
+  const audioSource = wordData.audio_clips?.[0]?.file_url || wordData.audio_url || wordData.audioUrl || '';
   const playableAudio = audioSource
     ? (audioSource.startsWith('data:') || audioSource.startsWith('http')
       ? audioSource
@@ -140,10 +144,14 @@ export default function WordDetailPage() {
             </div>
           )}
 
-          {playableAudio && (
+          {playableAudio ? (
             <div className="mt-4">
               <h3 className="text-sm font-medium text-surface-500 mb-2">التسجيل الصوتي</h3>
               <audio src={playableAudio} controls className="w-full" />
+            </div>
+          ) : (
+            <div className="mt-4 text-sm text-surface-400">
+              لا يوجد تسجيل صوتي مرفق لهذه الكلمة.
             </div>
           )}
         </div>
