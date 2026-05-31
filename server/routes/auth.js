@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
+const { authenticateToken } = require('../middleware/auth');
 
 if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET is missing in environment variables');
@@ -183,6 +184,45 @@ router.post('/login', async (req, res) => {
     res.status(500).json({
       error: 'خطأ في تسجيل الدخول'
     });
+  }
+});
+
+// ============================================
+// CURRENT USER
+// ============================================
+
+router.get('/me', authenticateToken, async (req, res) => {
+  try {
+    const pool = req.app.locals.pool;
+
+    const result = await pool.query(
+      `
+      SELECT
+        id,
+        username,
+        email,
+        display_name,
+        bio,
+        avatar_url,
+        role,
+        is_active,
+        created_at,
+        updated_at
+      FROM users
+      WHERE id = $1
+      LIMIT 1
+      `,
+      [req.user.id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'المستخدم غير موجود' });
+    }
+
+    res.json({ user: result.rows[0] });
+  } catch (err) {
+    console.error('Me error:', err);
+    res.status(500).json({ error: 'خطأ في جلب بيانات المستخدم' });
   }
 });
 
