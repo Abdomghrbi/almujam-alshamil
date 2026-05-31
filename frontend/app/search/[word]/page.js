@@ -66,7 +66,7 @@ export default function WordDetailPage() {
         <div className="flex items-start justify-between mb-4">
           <div>
             <h1 className="text-3xl font-bold text-surface-900 dark:text-white mb-1">{wordData.word}</h1>
-            <span className={`badge ${wordData.word_type === 'لهجة' ? 'badge-accent' : 'badge-primary'}`}>
+            <span className={`badge ${wordData.word_type === 'كنية' ? 'badge-accent' : 'badge-primary'}`}>
               {wordData.word_type || 'كلمة'}
             </span>
           </div>
