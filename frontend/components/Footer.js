@@ -1,7 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import { Github, Heart } from 'lucide-react';
+import { useAuth } from '../app/layout';
 
 export default function Footer() {
+  const { user } = useAuth();
+
   return (
     <footer className="bg-surface-50 dark:bg-surface-900 border-t border-surface-200 dark:border-surface-700 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -25,7 +30,9 @@ export default function Footer() {
             <div className="space-y-2 text-sm">
               <Link href="/search" className="block text-surface-500 hover:text-primary-600 transition-colors">البحث في المعجم</Link>
               <Link href="/add" className="block text-surface-500 hover:text-primary-600 transition-colors">إضافة كلمة جديدة</Link>
-              <Link href="/auth/register" className="block text-surface-500 hover:text-primary-600 transition-colors">إنشاء حساب</Link>
+              {!user && (
+                <Link href="/auth/register" className="block text-surface-500 hover:text-primary-600 transition-colors">إنشاء حساب</Link>
+              )}
             </div>
           </div>
 
