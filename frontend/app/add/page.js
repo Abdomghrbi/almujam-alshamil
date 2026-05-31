@@ -228,7 +228,7 @@ export default function AddWordPage() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 10v2a6 6 0 0012 0v-2" /></svg>
             تسجيل صوتي (اختياري)
           </h3>
-          <AudioRecorder />
+          <AudioRecorder onRecorded={(blob, url, base64) => setForm(prev => ({ ...prev, audioBase64: base64 }))} />
         </div>
 
         {/* Notes */}

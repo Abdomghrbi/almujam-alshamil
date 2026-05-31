@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import { Mic, Square, Play, Trash2, Loader2 } from 'lucide-react';
 
-export default function AudioRecorder({ onRecorded }) {
+export default function AudioRecorder({ onRecorded = () => {} }) {
   const [recording, setRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState('');
   const [audioBlob, setAudioBlob] = useState(null);
@@ -30,7 +30,13 @@ export default function AudioRecorder({ onRecorded }) {
         const url = URL.createObjectURL(blob);
         setAudioBlob(blob);
         setAudioUrl(url);
-        onRecorded(blob, url);
+        // Convert to base64
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64 = reader.result.split(',')[1];
+          onRecorded(blob, url, base64);
+        };
+        reader.readAsDataURL(blob);
 
         // Stop all tracks
         stream.getTracks().forEach(track => track.stop());
