@@ -12,8 +12,10 @@ export default function AddWordPage() {
   const router = useRouter();
   const [form, setForm] = useState({
     word: '',
-    word_type: 'معنى',
+    language: 'العربية',
+    word_type: 'كلمة',
     meaning: '',
+    example_usage: '',
     root: '',
     part_of_speech: '',
     pronunciation: '',
@@ -21,7 +23,7 @@ export default function AddWordPage() {
     state: '',
     city: '',
     district: '',
-    notes: '',
+    audioBase64: null,
   });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -48,71 +50,74 @@ export default function AddWordPage() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setSubmitting(true);
+    e.preventDefault();
+    setSubmitting(true);
 
-  try {
-    const body = {
-      word: form.word,
-      word_type: form.word_type,
-      meaning: form.meaning,
-      root: form.root || null,
-      part_of_speech: form.part_of_speech || null,
-      pronunciation: form.pronunciation || null,
+    try {
+      const body = {
+        word: form.word,
+        language: form.language || 'العربية',
+        word_type: form.word_type,
+        meaning: form.meaning,
+        example_usage: form.example_usage || null,
+        root: form.root || null,
+        part_of_speech: form.part_of_speech || null,
+        pronunciation: form.pronunciation || null,
 
-      // location (ضروري)
-      country: form.country,
-      state: form.state || null,
-      city: form.city || null,
-      district: form.district || null,
+        // location (ضروري)
+        country: form.country,
+        state: form.state || null,
+        city: form.city || null,
+        district: form.district || null,
 
-      // audio (إذا عم تستخدمه)
-      audioBase64: form.audioBase64 || null
-    };
+        // audio
+        audioBase64: form.audioBase64 || null
+      };
 
-    const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token');
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/words`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(body),
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/words`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(body),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setSuccess(true);
+
+        setForm({
+          word: '',
+          language: 'العربية',
+          word_type: 'كلمة',
+          meaning: '',
+          example_usage: '',
+          root: '',
+          part_of_speech: '',
+          pronunciation: '',
+          country: '',
+          state: '',
+          city: '',
+          district: '',
+          audioBase64: null
+        });
+      } else {
+        alert(data.error || 'حدث خطأ أثناء الإرسال');
       }
-    );
 
-    const data = await res.json();
-
-    if (res.ok) {
-      setSuccess(true);
-
-      setForm({
-        word: '',
-        word_type: 'معنى',
-        meaning: '',
-        root: '',
-        part_of_speech: '',
-        pronunciation: '',
-        country: '',
-        state: '',
-        city: '',
-        district: '',
-        notes: '',
-        audioBase64: null
-      });
-    } else {
-      alert(data.error || 'حدث خطأ أثناء الإرسال');
+    } catch (err) {
+      alert('فشل الاتصال بالخادم');
+    } finally {
+      setSubmitting(false);
     }
-
-  } catch (err) {
-    alert('فشل الاتصال بالخادم');
-  } finally {
-    setSubmitting(false);
-  }
-};
+  };
 
   if (success) {
     return (
@@ -129,7 +134,7 @@ export default function AddWordPage() {
     );
   }
 
-  const types = ['معنى', 'مرادف', 'جذر', 'لهجة'];
+  const types = ['كلمة', 'مثل', 'تعبير', 'مصطلح', 'كنية'];
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -162,6 +167,18 @@ export default function AddWordPage() {
           </div>
         </div>
 
+        {/* Language */}
+        <div>
+          <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">اللغة *</label>
+          <input
+            type="text"
+            value={form.language}
+            onChange={(e) => handleChange('language', e.target.value)}
+            placeholder="مثال: العربية"
+            className="input-field"
+          />
+        </div>
+
         {/* Meaning */}
         <div>
           <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">المعنى / الشرح *</label>
@@ -175,6 +192,18 @@ export default function AddWordPage() {
           />
         </div>
 
+        {/* Example usage */}
+        <div>
+          <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">مثال استخدام (اختياري)</label>
+          <textarea
+            value={form.example_usage}
+            onChange={(e) => handleChange('example_usage', e.target.value)}
+            rows={3}
+            placeholder="مثال لكيفية استخدام الكلمة في جملة أو سياق."
+            className="input-field resize-none"
+          />
+        </div>
+
         {/* Root + Pronunciation */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -183,7 +212,7 @@ export default function AddWordPage() {
               type="text"
               value={form.root}
               onChange={(e) => handleChange('root', e.target.value)}
-              placeholder=" مثال: ك ت ب"
+              placeholder="مثال: ك ت ب"
               className="input-field"
             />
           </div>
@@ -229,18 +258,6 @@ export default function AddWordPage() {
             تسجيل صوتي (اختياري)
           </h3>
           <AudioRecorder onRecorded={(blob, url, base64) => setForm(prev => ({ ...prev, audioBase64: base64 }))} />
-        </div>
-
-        {/* Notes */}
-        <div>
-          <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">ملاحظات إضافية (اختياري)</label>
-          <textarea
-            value={form.notes}
-            onChange={(e) => handleChange('notes', e.target.value)}
-            rows={2}
-            placeholder="أي معلومات إضافية…"
-            className="input-field resize-none"
-          />
         </div>
 
         {/* Submit */}
