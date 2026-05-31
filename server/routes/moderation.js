@@ -24,6 +24,9 @@ router.get(
           w.word_type,
           w.meaning,
           w.example_usage,
+          w.root,
+          w.part_of_speech,
+          w.pronunciation,
           w.status,
           w.created_at,
 
@@ -32,7 +35,12 @@ router.get(
           l.city,
           l.district,
 
-          u.username AS contributor_name
+          u.username AS contributor_name,
+          EXISTS (
+            SELECT 1
+            FROM audio_clips ac
+            WHERE ac.word_id = w.id
+          ) AS has_audio
 
         FROM words w
         LEFT JOIN locations l ON w.location_id = l.id
