@@ -33,7 +33,7 @@ export const wordsAPI = {
 
 export const moderationAPI = {
   pending: () => api.get('/api/moderation/pending'),
-  review: (id, action) => api.patch(`/api/moderation/${id}`, { action }),
+  review: (id, action) => api.put(`/api/moderation/${id}`, { action }),
 };
 
 export default api;
