@@ -1,135 +1,159 @@
 const express = require('express');
 const router = express.Router();
 
+function buildSearchClauses({ q, country, type, language }) {
+  const clauses = ["w.status = 'approved'"];
+  const params = [];
+  let i = 1;
+
+  if (q) {
+    clauses.push(`(
+      w.word ILIKE $${i}
+      OR w.meaning ILIKE $${i}
+      OR COALESCE(w.example_usage, '') ILIKE $${i}
+      OR COALESCE(w.root, '') ILIKE $${i}
+      OR COALESCE(w.part_of_speech, '') ILIKE $${i}
+      OR COALESCE(w.pronunciation, '') ILIKE $${i}
+      OR COALESCE(w.language, '') ILIKE $${i}
+      OR COALESCE(w.word_type, '') ILIKE $${i}
+      OR COALESCE(l.country, '') ILIKE $${i}
+      OR COALESCE(l.state, '') ILIKE $${i}
+      OR COALESCE(l.city, '') ILIKE $${i}
+      OR COALESCE(l.district, '') ILIKE $${i}
+    )`);
+    params.push(`%${q}%`);
+    i += 1;
+  }
+
+  if (country) {
+    clauses.push(`l.country ILIKE $${i}`);
+    params.push(country);
+    i += 1;
+  }
+
+  if (type) {
+    clauses.push(`w.word_type = $${i}`);
+    params.push(type);
+    i += 1;
+  }
+
+  if (language) {
+    clauses.push(`w.language ILIKE $${i}`);
+    params.push(language);
+    i += 1;
+  }
+
+  return { whereSql: clauses.join(' AND '), params };
+}
+
 router.get('/', async (req, res) => {
   try {
-    const { q, country, type, page = 1, limit = 20 } = req.query;
+    const { q, country, type, language } = req.query;
     const pool = req.app.locals.pool;
 
+    const page = Math.max(parseInt(req.query.page || '1', 10) || 1, 1);
+    const limit = Math.min(Math.max(parseInt(req.query.limit || '20', 10) || 20, 1), 100);
     const offset = (page - 1) * limit;
 
-    // ============================================
-    // 1. Base Query (flat rows)
-    // ============================================
-    let baseQuery = `
+    const { whereSql, params } = buildSearchClauses({ q, country, type, language });
+
+    const rowsResult = await pool.query(
+      `
       SELECT
         w.id,
         w.word,
         w.slug,
+        w.language,
         w.word_type,
-        w.root,
         w.meaning,
+        w.example_usage,
+        w.root,
+        w.part_of_speech,
+        w.pronunciation,
+        w.view_count,
         w.created_at,
         l.country,
         l.state,
         l.city,
         l.district,
-        u.username AS contributor_name
+        u.username AS contributor_name,
+        EXISTS (
+          SELECT 1
+          FROM audio_clips ac
+          WHERE ac.word_id = w.id
+        ) AS has_audio
       FROM words w
       LEFT JOIN locations l ON w.location_id = l.id
       LEFT JOIN users u ON w.contributor_id = u.id
-      WHERE w.status = 'approved'
-    `;
-
-    const params = [];
-    let i = 1;
-
-    if (q) {
-      baseQuery += ` AND (w.word ILIKE $${i} OR w.meaning ILIKE $${i})`;
-      params.push(`%${q}%`);
-      i++;
-    }
-
-    if (country) {
-      baseQuery += ` AND l.country ILIKE $${i}`;
-      params.push(country);
-      i++;
-    }
-
-    if (type) {
-      baseQuery += ` AND w.word_type = $${i}`;
-      params.push(type);
-      i++;
-    }
-
-    // ============================================
-    // 2. Fetch all rows (for grouping)
-    // ============================================
-    const result = await pool.query(
-      baseQuery + ` ORDER BY w.created_at DESC LIMIT $${i} OFFSET $${i + 1}`,
+      WHERE ${whereSql}
+      ORDER BY w.created_at DESC
+      LIMIT $${params.length + 1}
+      OFFSET $${params.length + 2}
+      `,
       [...params, limit, offset]
     );
 
-    // ============================================
-    // 3. Grouping logic (IMPORTANT PART)
-    // ============================================
-    const map = new Map();
-
-    for (const row of result.rows) {
-      if (!map.has(row.word)) {
-        map.set(row.word, {
-          word: row.word,
-          slug: row.slug,
-          word_type: row.word_type,
-          root: row.root,
-          entries: [],
-          contributors: new Set()
-        });
-      }
-
-      const item = map.get(row.word);
-
-      item.entries.push({
-        id: row.id,
-        meaning: row.meaning,
-        country: row.country,
-        state: row.state,
-        city: row.city,
-        district: row.district,
-        created_at: row.created_at
-      });
-
-      if (row.contributor_name) {
-        item.contributors.add(row.contributor_name);
-      }
-    }
-
-    // convert Set → Array
-    const words = Array.from(map.values()).map(w => ({
-      ...w,
-      contributors: Array.from(w.contributors)
-    }));
-
-    // ============================================
-    // 4. Count query (same filters)
-    // ============================================
     const countResult = await pool.query(
       `
-      SELECT COUNT(*) FROM words w
+      SELECT COUNT(*) AS count
+      FROM words w
       LEFT JOIN locations l ON w.location_id = l.id
-      WHERE w.status = 'approved'
-      ${q ? `AND (w.word ILIKE $1 OR w.meaning ILIKE $1)` : ''}
-      ${country ? `AND l.country ILIKE $${q ? 2 : 1}` : ''}
-      ${type ? `AND w.word_type = $${q && country ? 3 : q || country ? 2 : 1}` : ''}
+      WHERE ${whereSql}
       `,
-      params.slice(0, q && country && type ? 3 : params.length)
+      params
     );
 
-    const total = parseInt(countResult.rows[0].count);
+    const total = parseInt(countResult.rows[0].count, 10);
 
-    // ============================================
-    // 5. Response
-    // ============================================
     res.json({
-      words,
+      words: rowsResult.rows,
       total,
-      page: parseInt(page),
+      page,
       totalPages: Math.ceil(total / limit)
     });
-
   } catch (err) {
     console.error('Search error:', err);
     res.status(500).json({ error: 'خطأ في البحث' });
+  }
+});
+
+router.get('/suggest', async (req, res) => {
+  try {
+    const pool = req.app.locals.pool;
+    const q = (req.query.q || '').trim();
+
+    if (!q) {
+      return res.json({ suggestions: [] });
+    }
+
+    const result = await pool.query(
+      `
+      SELECT
+        w.word,
+        w.slug,
+        w.word_type,
+        w.language,
+        l.country
+      FROM words w
+      LEFT JOIN locations l ON w.location_id = l.id
+      WHERE w.status = 'approved'
+        AND (
+          w.word ILIKE $1
+          OR w.meaning ILIKE $1
+          OR COALESCE(w.example_usage, '') ILIKE $1
+          OR COALESCE(w.root, '') ILIKE $1
+          OR COALESCE(w.language, '') ILIKE $1
+        )
+      ORDER BY w.view_count DESC, w.created_at DESC
+      LIMIT 10
+      `,
+      [`%${q}%`]
+    );
+
+    res.json({ suggestions: result.rows });
+  } catch (err) {
+    console.error('Suggest error:', err);
+    res.status(500).json({ suggestions: [] });
   }
 });
 
