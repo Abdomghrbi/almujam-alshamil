@@ -14,7 +14,7 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
     country: '',
-    dialect: '',
+    language: '',
     type: '',
   });
   const [showFilters, setShowFilters] = useState(false);
@@ -30,7 +30,7 @@ export default function SearchPage() {
     try {
       const params = new URLSearchParams({ q: query });
       if (filters.country) params.append('country', filters.country);
-      if (filters.dialect) params.append('dialect', filters.dialect);
+      if (filters.language) params.append('language', filters.language);
       if (filters.type) params.append('type', filters.type);
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/search?${params}`);
@@ -50,7 +50,7 @@ export default function SearchPage() {
   };
 
   const countries = ['سوريا', 'العراق', 'السعودية', 'مصر', 'الأردن', 'لبنان', 'فلسطين', 'اليمن', 'عمان', 'الإمارات', 'قطر', 'البحرين', 'الكويت', 'ليبيا', 'تونس', 'الجزائر', 'المغرب', 'موريتانيا', 'السودان', 'الصومال', 'جيبوتي', 'جزر القمر'];
-  const types = ['معنى', 'مرادف', 'جذر', 'لهجة محلية'];
+  const types = ['كلمة', 'مثل', 'تعبير', 'مصطلح', 'كنية'];
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -96,6 +96,16 @@ export default function SearchPage() {
               </select>
             </div>
             <div>
+              <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">اللغة</label>
+              <input
+                type="text"
+                value={filters.language}
+                onChange={(e) => setFilters({ ...filters, language: e.target.value })}
+                placeholder="مثال: العربية"
+                className="input-field"
+              />
+            </div>
+            <div>
               <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">النوع</label>
               <select
                 value={filters.type}
@@ -106,18 +116,18 @@ export default function SearchPage() {
                 {types.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
-            <div className="flex items-end">
-              <button
-                onClick={() => { setFilters({ country: '', dialect: '', type: '' }); }}
-                className="btn-outline !py-2.5 !text-sm w-full"
-              >
-                إعادة تعيين
-              </button>
-            </div>
           </div>
-          <button onClick={performSearch} className="btn-primary w-full mt-4 !py-2.5">
-            <Filter size={16} className="inline ml-1" /> تطبيق الفلترة
-          </button>
+          <div className="flex gap-3 mt-4">
+            <button
+              onClick={() => { setFilters({ country: '', language: '', type: '' }); }}
+              className="btn-outline !py-2.5 !text-sm flex-1"
+            >
+              إعادة تعيين
+            </button>
+            <button onClick={performSearch} className="btn-primary flex-1 !py-2.5">
+              <Filter size={16} className="inline ml-1" /> تطبيق الفلترة
+            </button>
+          </div>
         </div>
       )}
 
@@ -149,4 +159,4 @@ export default function SearchPage() {
 
 function BookOpen(props) {
   return <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>;
-                  }
+}
