@@ -181,6 +181,10 @@ router.post('/', authenticateToken, async (req, res) => {
     // 6. Optional Audio
     // ============================================
     if (audioBase64) {
+      const fileUrl = audioBase64.startsWith('data:')
+        ? audioBase64
+        : `data:audio/webm;base64,${audioBase64}`;
+
       await pool.query(
         `
         INSERT INTO audio_clips (
@@ -191,7 +195,7 @@ router.post('/', authenticateToken, async (req, res) => {
         )
         VALUES ($1,$2,'webm',$3)
         `,
-        [createdWord.id, audioBase64, req.user.id]
+        [createdWord.id, fileUrl, req.user.id]
       );
     }
 
