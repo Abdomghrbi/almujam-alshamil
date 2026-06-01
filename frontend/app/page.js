@@ -207,8 +207,8 @@ export default function HomePage() {
               <Search size={18} className="inline ml-2" />
               استكشف الكلمات
             </Link>
-            <a href="https://github.com/Abdomghrbi/almujam-alshamil" target="_blank" rel="noopener noreferrer" className="border-2 border-white/40 text-white hover:bg-white/10 font-medium px-8 py-3 rounded-xl transition-all">
-              <ArrowLeft size={18} className="inline ml-2 bg-black text-white" />
+            <a href="https://github.com/Abdomghrbi/almujam-alshamil" target="_blank" rel="noopener noreferrer" className="border-2 border-white/40 bg-black text-white hover:bg-white/10 font-medium px-8 py-3 rounded-xl transition-all">
+              <ArrowLeft size={18} className="inline ml-2" />
               شاهد الكود المصدر
             </a>
           </div>
