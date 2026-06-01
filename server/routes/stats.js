@@ -28,6 +28,7 @@ router.get('/', async (req, res) => {
 
     const row = result.rows[0] || {};
 
+    res.set('Cache-Control', 'no-store');
     res.json({
       approvedWords: Number(row.approved_words || 0),
       audioClips: Number(row.audio_clips || 0),
