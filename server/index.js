@@ -7,6 +7,7 @@ const authRoutes = require('./routes/auth');
 const wordsRoutes = require('./routes/words');
 const moderationRoutes = require('./routes/moderation');
 const searchRoutes = require('./routes/search');
+const statsRoutes = require('./routes/stats');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,6 +32,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/words', wordsRoutes);
 app.use('/api/moderation', moderationRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api/stats', statsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
