@@ -32,7 +32,6 @@ router.get(
 
           l.country,
           l.state,
-          l.city,
           l.district,
 
           u.username AS contributor_name,
