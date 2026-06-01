@@ -24,10 +24,9 @@ CREATE TABLE IF NOT EXISTS public.locations (
   language VARCHAR(50) NOT NULL DEFAULT 'العربية',
   country VARCHAR(100) NOT NULL,
   state VARCHAR(100),
-  city VARCHAR(100),
   district VARCHAR(100),
   created_at TIMESTAMP DEFAULT NOW(),
-  UNIQUE (language, country, COALESCE(state,''), COALESCE(city,''), COALESCE(district,''))
+  UNIQUE (language, country, COALESCE(state,''), COALESCE(district,''))
 );
 
 -- 3. جدول الكلمات
