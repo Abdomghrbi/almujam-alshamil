@@ -66,6 +66,32 @@ export default function RootLayout({ children }) {
     setUser(null);
   };
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://almujam-alshamil.vercel.app';
+  const ogImage = `${siteUrl}/og-image.svg`;
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        name: 'المعجم الشامل',
+        url: siteUrl,
+        logo: ogImage,
+        sameAs: ['https://github.com/Abdomghrbi/almujam-alshamil']
+      },
+      {
+        '@type': 'WebSite',
+        name: 'المعجم الشامل',
+        url: siteUrl,
+        inLanguage: 'ar',
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: `${siteUrl}/search?q={search_term_string}`,
+          'query-input': 'required name=search_term_string'
+        }
+      }
+    ]
+  };
+
   if (loading) {
     return (
       <html lang="ar" dir="rtl">
@@ -81,10 +107,27 @@ export default function RootLayout({ children }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>المعجم الشامل — موسوعة اللهجات والمفردات العربية</title>
-        <meta name="description" content="المعجم الشامل هو قاموس مفتوح المصدر يوثّق الكلمات العربية الفُصحى واللهجات المتنوعة مع تسجيلات صوتية حقيقية." />
+        <title>المعجم الشامل — موسوعة عربية مفتوحة المصدر للكلمات واللهجات</title>
+        <meta name="description" content="المعجم الشامل موسوعة عربية مفتوحة المصدر للكلمات والمعاني والمرادفات والجذور واللهجات مع تسجيلات صوتية أصلية." />
+        <meta name="keywords" content="معجم عربي, لهجات عربية, كلمات عربية, مرادفات, جذور الكلمات, تسجيلات صوتية, موسوعة عربية" />
+        <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
         <meta name="theme-color" content="#4c6ef5" />
-        <link rel="icon" href="/favicon.ico" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="المعجم الشامل" />
+        <meta property="og:locale" content="ar_AR" />
+        <meta property="og:title" content="المعجم الشامل — موسوعة عربية مفتوحة المصدر للكلمات واللهجات" />
+        <meta property="og:description" content="المعجم الشامل موسوعة عربية مفتوحة المصدر للكلمات والمعاني والمرادفات والجذور واللهجات مع تسجيلات صوتية أصلية." />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="المعجم الشامل — موسوعة عربية مفتوحة المصدر" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="المعجم الشامل — موسوعة عربية مفتوحة المصدر للكلمات واللهجات" />
+        <meta name="twitter:description" content="المعجم الشامل موسوعة عربية مفتوحة المصدر للكلمات والمعاني والمرادفات والجذور واللهجات مع تسجيلات صوتية أصلية." />
+        <meta name="twitter:image" content={ogImage} />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       </head>
       <body className="min-h-screen flex flex-col">
         <AuthContext.Provider value={{ user, login, logout, darkMode, toggleDarkMode }}>
