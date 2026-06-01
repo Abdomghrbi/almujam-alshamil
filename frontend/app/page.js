@@ -80,8 +80,6 @@ export default function HomePage() {
             <span className="bg-gradient-to-l from-primary-600 to-accent-600 bg-clip-text text-transparent">
               المعجم الشامل
             </span>
-            <br />
-            موسوعة اللهجات والمفردات العربية
           </h1>
 
           <p className="text-lg sm:text-xl text-surface-500 dark:text-surface-400 max-w-2xl mx-auto mb-8 leading-relaxed">
