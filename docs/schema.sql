@@ -35,7 +35,6 @@ CREATE TABLE public.locations (
 
     country VARCHAR(100) NOT NULL,
     state VARCHAR(100),
-    city VARCHAR(100),
     district VARCHAR(100),
 
     created_at TIMESTAMP DEFAULT NOW()
@@ -45,7 +44,6 @@ CREATE UNIQUE INDEX idx_locations_unique
 ON public.locations (
     country,
     COALESCE(state,''),
-    COALESCE(city,''),
     COALESCE(district,'')
 );
 
