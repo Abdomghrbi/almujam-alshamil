@@ -23,7 +23,8 @@ router.get('/', async (req, res) => {
         (SELECT COUNT(DISTINCT contributor_id)
           FROM approved_words
           WHERE contributor_id IS NOT NULL
-        ) AS contributors
+        ) AS contributors,
+        (SELECT COUNT(*) FROM words WHERE status = 'pending') AS pending_words
     `);
 
     const row = result.rows[0] || {};
@@ -34,6 +35,7 @@ router.get('/', async (req, res) => {
       audioClips: Number(row.audio_clips || 0),
       locationsCovered: Number(row.locations_covered || 0),
       contributors: Number(row.contributors || 0),
+      pendingWords: Number(row.pending_words || 0),
     });
   } catch (err) {
     console.error('Stats error:', err);
