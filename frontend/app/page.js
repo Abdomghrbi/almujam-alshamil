@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Search, BookOpen, Mic, Globe2, Users, ArrowLeft, Sparkles } from 'lucide-react';
 import { useAuth } from './layout';
+import { Github } from "react-icons/github";
+
 
 const STAT_CONFIG = [
   { key: 'approvedWords', icon: BookOpen, label: 'كلمة موثقة', color: 'from-primary-500 to-primary-600' },
@@ -208,6 +210,7 @@ export default function HomePage() {
             </Link>
             <a href="https://github.com/Abdomghrbi/almujam-alshamil" target="_blank" rel="noopener noreferrer" className="border-2 border-white/40 text-white hover:bg-white/10 font-medium px-8 py-3 rounded-xl transition-all">
               <ArrowLeft size={18} className="inline ml-2" />
+            <Github size={18} className="inline" />
               شاهد الكود المصدر
             </a>
           </div>
