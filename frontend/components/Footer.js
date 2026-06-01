@@ -62,11 +62,11 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Moderation / Pending Words */}
+          {/* Pending Words */}
           <div>
             <h3 className="font-bold text-surface-700 dark:text-surface-300 mb-3 flex items-center gap-2">
               <ShieldCheck size={16} className="text-primary-600" />
-              الإشراف والمراجعة
+              المساهمة 
             </h3>
             <p className="text-sm text-surface-500 dark:text-surface-400 leading-relaxed mb-3">
               عندنا الآن <strong className="text-surface-700 dark:text-surface-200">{pendingWords === null ? '…' : Number(pendingWords).toLocaleString('ar-EG')}</strong> كلمة معلّقة تنتظر المراجعة.
