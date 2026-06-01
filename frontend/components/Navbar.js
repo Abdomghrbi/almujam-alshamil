@@ -8,12 +8,13 @@ import { BookOpen, PlusCircle, Search, User, LogOut, Sun, Moon, Menu, X, Shield 
 export default function Navbar() {
   const { user, logout, darkMode, toggleDarkMode } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const canModerate = user?.role === 'admin' || user?.role === 'moderator';
 
   const navLinks = [
     { href: '/', label: 'الرئيسية', icon: BookOpen },
     { href: '/search', label: 'بحث', icon: Search },
     ...(user ? [{ href: '/add', label: 'أضف كلمة', icon: PlusCircle }] : []),
-    ...(user?.role === 'admin' ? [{ href: '/moderation', label: 'لوحة المشرفين', icon: Shield }] : []),
+    ...(canModerate ? [{ href: '/moderation', label: 'لوحة المشرفين', icon: Shield }] : []),
   ];
 
   return (
