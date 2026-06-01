@@ -133,13 +133,13 @@ export default function WordDetailPage() {
             </div>
           )}
 
-          {(wordData.country || wordData.state || wordData.city) && (
+          {(wordData.country || wordData.state || wordData.district) && (
             <div className="flex items-center gap-2 text-sm text-surface-600 dark:text-surface-400">
               <MapPin size={14} />
               <span>
                 {wordData.country}
                 {wordData.state ? ` / ${wordData.state}` : ''}
-                {wordData.city ? ` / ${wordData.city}` : ''}
+                {wordData.district ? ` / ${wordData.district}` : ''}
               </span>
             </div>
           )}
