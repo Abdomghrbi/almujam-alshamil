@@ -8,22 +8,32 @@ export default function ModerationPage() {
   const { user } = useAuth();
   const [pendingWords, setPendingWords] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (user?.role === 'admin') fetchPending();
+    if (user?.role === 'admin' || user?.role === 'moderator') fetchPending();
     else setLoading(false);
   }, [user]);
 
   const fetchPending = async () => {
     try {
+      setError('');
       const token = localStorage.getItem('token');
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com'}/api/moderation/pending`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'تعذر جلب الكلمات المعلقة');
+      }
+
       setPendingWords(data.words || []);
     } catch (err) {
       console.error(err);
+      setPendingWords([]);
+      setError(err.message || 'تعذر جلب الكلمات المعلقة');
     } finally {
       setLoading(false);
     }
@@ -45,7 +55,7 @@ export default function ModerationPage() {
     }
   };
 
-  if (!user || user.role !== 'admin') {
+  if (!user || (user.role !== 'admin' && user.role !== 'moderator')) {
     return (
       <div className="max-w-lg mx-auto px-4 py-16 text-center">
         <div className="card">
@@ -72,6 +82,12 @@ export default function ModerationPage() {
         <h1 className="text-2xl font-bold text-surface-900 dark:text-white">لوحة الإشراف</h1>
         <span className="badge-primary">{pendingWords.length} كلمة بانتظار المراجعة</span>
       </div>
+
+      {error ? (
+        <div className="card mb-6 border border-amber-200 dark:border-amber-900/40 bg-amber-50/60 dark:bg-amber-900/10">
+          <p className="text-amber-800 dark:text-amber-200 text-sm">{error}</p>
+        </div>
+      ) : null}
 
       {pendingWords.length === 0 ? (
         <div className="text-center py-16 card">
@@ -105,7 +121,7 @@ export default function ModerationPage() {
               {word.pronunciation && <div className="text-sm text-surface-500 mb-3">النطق: {word.pronunciation}</div>}
 
               <div className="flex items-center gap-4 text-sm text-surface-400 mb-4">
-                {word.country && <span className="flex items-center gap-1"><MapPin size={14} /> {word.country}{word.state ? ` / ${word.state}` : ''}{word.city ? ` / ${word.city}` : ''}</span>}
+                {word.country && <span className="flex items-center gap-1"><MapPin size={14} /> {word.country}{word.state ? ` / ${word.state}` : ''}{word.district ? ` / ${word.district}` : ''}</span>}
               </div>
 
               <div className="flex items-center gap-3">
