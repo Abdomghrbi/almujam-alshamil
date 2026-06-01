@@ -210,7 +210,7 @@ export default function HomePage() {
             </Link>
             <a href="https://github.com/Abdomghrbi/almujam-alshamil" target="_blank" rel="noopener noreferrer" className="border-2 border-white/40 text-white hover:bg-white/10 font-medium px-8 py-3 rounded-xl transition-all">
               <ArrowLeft size={18} className="inline ml-2" />
-            <Github size={18} className="inline" />
+            <Github size={18} />
               شاهد الكود المصدر
             </a>
           </div>
