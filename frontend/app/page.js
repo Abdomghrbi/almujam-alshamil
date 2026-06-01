@@ -201,16 +201,18 @@ export default function HomePage() {
           <p className="text-lg text-white/80 mb-8">
             كل كلمة توثّقها هي لبنة في صرح لغتنا. ساهم الآن!
           </p>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
-            <Link href="/search" className="bg-white text-primary-700 font-bold px-8 py-3 rounded-xl hover:bg-white/90 transition-all shadow-lg">
-              <Search size={18} className="inline ml-2" />
-              استكشف الكلمات
-            </Link>
-            <a href="https://github.com/Abdomghrbi/almujam-alshamil" target="_blank" rel="noopener noreferrer" className="border-2 border-white/40 text-white hover:bg-white/10 font-medium px-8 py-3 rounded-xl transition-all">
-              <ArrowLeft size={18} className="inline ml-2" />
+        <div className="flex items-center justify-center gap-4 flex-wrap">
+          <Link href="/search" className="bg-white text-primary-700 font-bold px-8 py-3 rounded-xl hover:bg-white/90 transition-all shadow-lg">
+            <Search size={18} className="inline ml-2" />
+               استكشف الكلمات
+          </Link>
+           <a href="https://github.com/Abdomghrbi/almujam-alshamil" target="_blank" rel="noopener noreferrer"
+            className="bg-black text-white hover:bg-gray-800 font-medium px-8 py-3 rounded-xl transition-all flex items-center gap-2">
+            <Github size={18} className="inline" />
               شاهد الكود المصدر
-            </a>
-          </div>
+           </a>
+         </div>
+
         </div>
       </section>
     </div>
