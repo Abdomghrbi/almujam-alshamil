@@ -1,18 +1,65 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Search, BookOpen, Mic, Globe2, Users, ArrowLeft, Sparkles } from 'lucide-react';
 import { useAuth } from './layout';
 
+const STAT_CONFIG = [
+  { key: 'approvedWords', icon: BookOpen, label: 'كلمة موثقة', color: 'from-primary-500 to-primary-600' },
+  { key: 'audioClips', icon: Mic, label: 'تسجيل صوتي', color: 'from-accent-500 to-accent-600' },
+  { key: 'locationsCovered', icon: Globe2, label: 'تغطية جغرافية', color: 'from-emerald-500 to-emerald-600' },
+  { key: 'contributors', icon: Users, label: 'مساهم', color: 'from-violet-500 to-violet-600' },
+];
+
 export default function HomePage() {
   const { user } = useAuth();
+  const [stats, setStats] = useState({
+    approvedWords: null,
+    audioClips: null,
+    locationsCovered: null,
+    contributors: null,
+  });
+  const [statsLoading, setStatsLoading] = useState(true);
 
-  const stats = [
-    { icon: BookOpen, label: 'كلمة موثقة', value: '—', color: 'from-primary-500 to-primary-600' },
-    { icon: Mic, label: 'تسجيل صوتي', value: '—', color: 'from-accent-500 to-accent-600' },
-    { icon: Globe2, label: 'لهجة', value: '—', color: 'from-emerald-500 to-emerald-600' },
-    { icon: Users, label: 'مساهم', value: '—', color: 'from-violet-500 to-violet-600' },
-  ];
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadStats = async () => {
+      try {
+        const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com';
+        const res = await fetch(`${apiBase}/api/stats`);
+        const data = await res.json();
+
+        if (cancelled) return;
+
+        if (res.ok) {
+          setStats({
+            approvedWords: Number(data.approvedWords ?? 0),
+            audioClips: Number(data.audioClips ?? 0),
+            locationsCovered: Number(data.locationsCovered ?? 0),
+            contributors: Number(data.contributors ?? 0),
+          });
+        }
+      } catch (err) {
+        // Keep the fallback placeholders if the API is unavailable.
+      } finally {
+        if (!cancelled) setStatsLoading(false);
+      }
+    };
+
+    loadStats();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const formatStatValue = (value) => {
+    if (statsLoading) return '…';
+    if (value === null || value === undefined) return '—';
+    return Number(value).toLocaleString('ar-EG');
+  };
 
   return (
     <div>
@@ -82,12 +129,14 @@ export default function HomePage() {
       <section className="py-12 bg-white dark:bg-surface-800 border-y border-surface-200 dark:border-surface-700">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {stats.map((stat, i) => (
-              <div key={i} className="text-center p-4">
+            {STAT_CONFIG.map((stat) => (
+              <div key={stat.key} className="text-center p-4">
                 <div className={`w-12 h-12 mx-auto mb-3 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-md`}>
                   <stat.icon size={22} className="text-white" />
                 </div>
-                <div className="text-3xl font-bold text-surface-800 dark:text-white mb-1">{stat.value}</div>
+                <div className="text-3xl font-bold text-surface-800 dark:text-white mb-1">
+                  {formatStatValue(stats[stat.key])}
+                </div>
                 <div className="text-sm text-surface-500">{stat.label}</div>
               </div>
             ))}
