@@ -18,7 +18,6 @@ function buildSearchClauses({ q, country, type, language }) {
       OR COALESCE(w.word_type, '') ILIKE $${i}
       OR COALESCE(l.country, '') ILIKE $${i}
       OR COALESCE(l.state, '') ILIKE $${i}
-      OR COALESCE(l.city, '') ILIKE $${i}
       OR COALESCE(l.district, '') ILIKE $${i}
     )`);
     params.push(`%${q}%`);
@@ -74,7 +73,6 @@ router.get('/', async (req, res) => {
         w.created_at,
         l.country,
         l.state,
-        l.city,
         l.district,
         u.username AS contributor_name,
         EXISTS (
