@@ -21,13 +21,18 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all">
-              <span className="text-white font-bold text-lg">م</span>
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all ring-1 ring-white/30">
+              <BookOpen size={20} className="text-white" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-l from-primary-600 to-accent-600 bg-clip-text text-transparent">
-              المُعجَم الشامِل
-            </span>
+            <div className="flex flex-col leading-tight">
+              <span className="text-xl font-bold bg-gradient-to-l from-primary-600 to-accent-600 bg-clip-text text-transparent">
+                المُعجم الشامل
+              </span>
+              <span className="text-[11px] text-surface-400 dark:text-surface-500 -mt-0.5">
+                موسوعة الكلمات واللهجات
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Nav */}
