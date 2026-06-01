@@ -69,10 +69,10 @@ export default function Footer() {
               المساهمة 
             </h3>
             <p className="text-sm text-surface-500 dark:text-surface-400 leading-relaxed mb-3">
-              عندنا الآن <strong className="text-surface-700 dark:text-surface-200">{pendingWords === null ? '…' : Number(pendingWords).toLocaleString('ar-EG')}</strong> كلمة معلّقة تنتظر المراجعة.
+              لدينا الآن <strong className="text-surface-700 dark:text-surface-200">{pendingWords === null ? '…' : Number(pendingWords).toLocaleString('ar-EG')}</strong> كلمة مُعلّقة تنتظر المراجعة.
             </p>
             <p className="text-sm text-surface-500 dark:text-surface-400 mb-3">
-              إذا أردت المساهمة في الإشراف والمراجعة، راسلنا عبر البريد المؤقت:
+              تواصل معنا:
             </p>
             <a
               href="mailto:moderation@example.com"
