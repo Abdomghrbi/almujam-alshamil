@@ -21,7 +21,6 @@ export default function AddWordPage() {
     pronunciation: '',
     country: '',
     state: '',
-    city: '',
     district: '',
     audioBase64: null,
   });
@@ -67,7 +66,6 @@ export default function AddWordPage() {
         // location (ضروري)
         country: form.country,
         state: form.state || null,
-        city: form.city || null,
         district: form.district || null,
 
         // audio
@@ -104,7 +102,6 @@ export default function AddWordPage() {
           pronunciation: '',
           country: '',
           state: '',
-          city: '',
           district: '',
           audioBase64: null
         });
