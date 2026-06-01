@@ -36,10 +36,10 @@ export default function WordCard({ word }) {
             {word.language}
           </span>
         )}
-        {word.country && (
+        {(word.country || word.state || word.district) && (
           <span className="flex items-center gap-1">
             <MapPin size={12} />
-            {word.country}{word.city ? `, ${word.city}` : ''}
+            {word.country}{word.state ? `, ${word.state}` : ''}{word.district ? `, ${word.district}` : ''}
           </span>
         )}
         {(word.has_audio || word.hasAudio) && (
