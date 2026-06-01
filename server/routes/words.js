@@ -19,7 +19,6 @@ router.post('/', authenticateToken, async (req, res) => {
       pronunciation,
       country,
       state,
-      city,
       district,
       audioBase64
     } = req.body;
@@ -50,14 +49,12 @@ router.post('/', authenticateToken, async (req, res) => {
       FROM locations
       WHERE country = $1
         AND COALESCE(state,'') = COALESCE($2,'')
-        AND COALESCE(city,'') = COALESCE($3,'')
-        AND COALESCE(district,'') = COALESCE($4,'')
+        AND COALESCE(district,'') = COALESCE($3,'')
       LIMIT 1
       `,
       [
         country,
         state || null,
-        city || null,
         district || null
       ]
     );
@@ -72,16 +69,14 @@ router.post('/', authenticateToken, async (req, res) => {
         INSERT INTO locations (
           country,
           state,
-          city,
           district
         )
-        VALUES ($1,$2,$3,$4)
+        VALUES ($1,$2,$3)
         RETURNING id
         `,
         [
           country,
           state || null,
-          city || null,
           district || null
         ]
       );
@@ -230,7 +225,6 @@ router.get('/:id', async (req, res) => {
         w.*,
         l.country,
         l.state,
-        l.city,
         l.district,
         u.username AS contributor_name,
         EXISTS (
