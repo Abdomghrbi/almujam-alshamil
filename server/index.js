@@ -8,6 +8,7 @@ const wordsRoutes = require('./routes/words');
 const moderationRoutes = require('./routes/moderation');
 const searchRoutes = require('./routes/search');
 const statsRoutes = require('./routes/stats');
+const chatRoutes = require('./routes/chat');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -33,6 +34,7 @@ app.use('/api/words', wordsRoutes);
 app.use('/api/moderation', moderationRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
