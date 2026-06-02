@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
+const DEEPSEEK_URL = 'https://api.deepseek.com/v1/chat/completions';
 
 const SYSTEM_PROMPT = `أنت "مُعجَميّ"، وكيل ذكي مساعد في منصة "المعجم الشامل" - أكبر معجم شامل للغة العربية واللهجات العربية في الوطن العربي.
 
@@ -31,36 +31,37 @@ const SYSTEM_PROMPT = `أنت "مُعجَميّ"، وكيل ذكي مساعد ف
 
 router.post('/', async (req, res) => {
   try {
-    const { message, username } = req.body;
+    const { message } = req.body;
 
     if (!message) {
       return res.status(400).json({ error: 'الرسالة مطلوبة' });
     }
 
-    const response = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
+    const response = await fetch(DEEPSEEK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+      },
       body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: `${SYSTEM_PROMPT}\n\nرسالة المستخدم: ${message}`
-          }]
-        }],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 500,
-        }
+        model: 'deepseek-chat',
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: message }
+        ],
+        temperature: 0.7,
+        max_tokens: 500
       })
     });
 
     const data = await response.json();
 
     if (data.error) {
-      console.error('Gemini API Error:', data.error);
-      return res.status(500).json({ error: 'خطأ من طرف خدمة الذكاء الاصطناعي' });
+      console.error('DeepSeek API Error:', data.error);
+      return res.status(500).json({ error: 'خطأ في خدمة الذكاء الاصطناعي' });
     }
 
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    const reply = data.choices?.[0]?.message?.content;
 
     if (!reply) {
       return res.status(500).json({ error: 'لم يتم الحصول على رد' });
