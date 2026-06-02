@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
     'Authorization': `Bearer ${XAI_API_KEY}`
   },
   body: JSON.stringify({
-    model: 'grok-2-1212',
+    model: 'grok-4.3',
     messages: [
       { role: 'system', content: SYSTEM_PROMPT },
       { role: 'user', content: message }
