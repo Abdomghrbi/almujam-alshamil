@@ -58,7 +58,7 @@ router.post('/', async (req, res) => {
     const data = await response.json();
 
     if (data.error) {
-      console.error('Groq API Error:', data.error);
+      console.error('xAI API Error:', data.error);
       return res.status(500).json({ error: 'خطأ في خدمة الذكاء الاصطناعي' });
     }
 
