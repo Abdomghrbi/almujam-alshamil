@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
-const DEEPSEEK_URL = 'https://api.deepseek.com/v1/chat/completions';
-
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const SYSTEM_PROMPT = `أنت "مُعجَميّ"، وكيل ذكي مساعد في منصة "المعجم الشامل" - أكبر معجم شامل للغة العربية واللهجات العربية في الوطن العربي.
 
 قواعدك الصارمة:
@@ -38,21 +37,22 @@ router.post('/', async (req, res) => {
     }
 
     const response = await fetch(DEEPSEEK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'deepseek-chat',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: message }
-        ],
-        temperature: 0.7,
-        max_tokens: 500
-      })
-    });
+    const response = await fetch(GROQ_URL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${GROQ_API_KEY}`
+  },
+  body: JSON.stringify({
+    model: 'llama-3.3-70b-versatile',  // أو 'mixtral-8x7b-32768'
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: message }
+    ],
+    temperature: 0.7,
+    max_tokens: 500
+  })
+});
 
     const data = await response.json();
 
