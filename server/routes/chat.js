@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
       body: JSON.stringify({
         contents: [{
           parts: [{
-            text: `${SYSTEM_PROMPT}\n\nاسم المستخدم: ${username || 'صديقي'}\n\nرسالة المستخدم: ${message}`
+            text: `${SYSTEM_PROMPT}\n\nرسالة المستخدم: ${message}`
           }]
         }],
         generationConfig: {
