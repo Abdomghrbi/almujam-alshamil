@@ -1,8 +1,10 @@
 const express = require('express');
+const fetch = require('node-fetch');
 const router = express.Router();
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
 const SYSTEM_PROMPT = `أنت "مُعجَميّ"، وكيل ذكي مساعد في منصة "المعجم الشامل" - أكبر معجم شامل للغة العربية واللهجات العربية في الوطن العربي.
 
 قواعدك الصارمة:
@@ -36,28 +38,27 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'الرسالة مطلوبة' });
     }
 
-    const response = await fetch(DEEPSEEK_URL, {
     const response = await fetch(GROQ_URL, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${GROQ_API_KEY}`
-  },
-  body: JSON.stringify({
-    model: 'llama-3.3-70b-versatile',  // أو 'mixtral-8x7b-32768'
-    messages: [
-      { role: 'system', content: SYSTEM_PROMPT },
-      { role: 'user', content: message }
-    ],
-    temperature: 0.7,
-    max_tokens: 500
-  })
-});
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GROQ_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: message }
+        ],
+        temperature: 0.7,
+        max_tokens: 500
+      })
+    });
 
     const data = await response.json();
 
     if (data.error) {
-      console.error('DeepSeek API Error:', data.error);
+      console.error('Groq API Error:', data.error);
       return res.status(500).json({ error: 'خطأ في خدمة الذكاء الاصطناعي' });
     }
 
