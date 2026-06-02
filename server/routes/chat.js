@@ -1,5 +1,4 @@
 const express = require('express');
-const fetch = require('node-fetch');
 const router = express.Router();
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
