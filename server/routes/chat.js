@@ -2,8 +2,8 @@ const express = require('express');
 const fetch = require('node-fetch');
 const router = express.Router();
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
-const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const XAI_API_KEY = process.env.XAI_API_KEY;
+const XAI_URL = 'https://api.x.ai/v1/chat/completions';
 
 const SYSTEM_PROMPT = `أنت "مُعجَميّ"، وكيل ذكي مساعد في منصة "المعجم الشامل" - أكبر معجم شامل للغة العربية واللهجات العربية في الوطن العربي.
 
@@ -38,22 +38,22 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'الرسالة مطلوبة' });
     }
 
-    const response = await fetch(GROQ_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GROQ_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: message }
-        ],
-        temperature: 0.7,
-        max_tokens: 500
-      })
-    });
+    const response = await fetch(XAI_URL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${XAI_API_KEY}`
+  },
+  body: JSON.stringify({
+    model: 'grok-2-latest',
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: message }
+    ],
+    temperature: 0.7,
+    max_tokens: 500
+  })
+});
 
     const data = await response.json();
 
