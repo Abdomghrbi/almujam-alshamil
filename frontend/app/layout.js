@@ -129,11 +129,13 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" href="/favicon.svg" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       </head>
-       <body>
-        <Navbar user={user} toggleDarkMode={toggleDarkMode} darkMode={darkMode} onLogout={logout} />
-         <main id="main-content">{children}</main>
-       <Footer />
-     </body>
+      <body className="min-h-screen flex flex-col">
+        <AuthContext.Provider value={{ user, login, logout, darkMode, toggleDarkMode }}>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </AuthContext.Provider>
+      </body>
     </html>
   );
 }
