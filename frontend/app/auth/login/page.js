@@ -73,25 +73,72 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">اسم المستخدم</label>
-              <div className="relative">
-                <User size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400" />
-                <input type="text" value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} required className="input-field pr-10" placeholder="أدخل اسم المستخدم" />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">كلمة المرور</label>
-              <div className="relative">
-                <Lock size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400" />
-                <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required className="input-field pr-10" placeholder="أدخل كلمة المرور" />
-              </div>
-            </div>
-            <button type="submit" disabled={loading} className="btn-primary w-full !py-3">
-              {loading ? 'جاري الدخول…' : 'تسجيل الدخول'}
-            </button>
-          </form>
+          <<form onSubmit={handleSubmit} className="space-y-4">
+     <div>
+    <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">
+      اسم المستخدم
+    </label>
+
+    <div className="relative">
+      <User
+        size={16}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400"
+      />
+
+      <input
+        type="text"
+        value={form.username}
+        onChange={(e) =>
+          setForm({ ...form, username: e.target.value })
+        }
+        required
+        className="input-field pr-10"
+        placeholder="أدخل اسم المستخدم"
+      />
+    </div>
+  </div>
+
+  <div>
+    <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">
+      كلمة المرور
+    </label>
+
+    <div className="relative">
+      <Lock
+        size={16}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400"
+      />
+
+      <input
+        type="password"
+        value={form.password}
+        onChange={(e) =>
+          setForm({ ...form, password: e.target.value })
+        }
+        required
+        className="input-field pr-10"
+        placeholder="أدخل كلمة المرور"
+      />
+    </div>
+
+    <div className="mt-2 text-left">
+      <Link
+        href="/auth/forgot-password"
+        className="text-xs text-primary-600 hover:text-primary-700"
+      >
+        نسيت كلمة المرور؟
+      </Link>
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    disabled={loading}
+    className="btn-primary w-full !py-3"
+  >
+    {loading ? 'جاري الدخول…' : 'تسجيل الدخول'}
+  </button>
+</form>
 
           <div className="text-center mt-4 text-sm text-surface-500">
             ليس لديك حساب؟{' '}
