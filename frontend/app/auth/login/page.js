@@ -73,7 +73,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          <<form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
      <div>
     <label className="block text-sm font-medium text-surface-600 dark:text-surface-400 mb-1.5">
       اسم المستخدم
