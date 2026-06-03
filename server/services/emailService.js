@@ -8,28 +8,46 @@ async function sendPasswordResetEmail(email, resetLink) {
     to: email,
     subject: 'إعادة تعيين كلمة المرور',
     html: `
-      <div dir="rtl" style="font-family: sans-serif">
-        <h2>إعادة تعيين كلمة المرور</h2>
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px">
+  <h2>المعجم الشامل</h2>
 
-        <p>
-          تم طلب إعادة تعيين كلمة المرور الخاصة بحسابك.
-        </p>
+  <p>مرحباً،</p>
 
-        <p>
-          اضغط على الرابط التالي:
-        </p>
+  <p>
+    تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بحسابك.
+  </p>
 
-        <p>
-          <a href="${resetLink}">
-            إعادة تعيين كلمة المرور
-          </a>
-        </p>
+  <p style="text-align:center;margin:30px 0">
+    <a
+      href="${resetLink}"
+      style="
+        background:#2563eb;
+        color:white;
+        padding:12px 24px;
+        text-decoration:none;
+        border-radius:8px;
+        display:inline-block;
+      "
+    >
+      إعادة تعيين كلمة المرور
+    </a>
+  </p>
 
-        <p>
-          إذا لم تطلب ذلك، تجاهل هذه الرسالة.
-        </p>
-      </div>
-    `
+  <p>
+    تنتهي صلاحية هذا الرابط خلال ساعة واحدة.
+  </p>
+
+  <p>
+    إذا لم تطلب إعادة تعيين كلمة المرور يمكنك تجاهل هذه الرسالة.
+  </p>
+
+  <hr>
+
+  <small>
+    © المعجم الشامل
+  </small>
+</div>
+`
   });
 }
 
