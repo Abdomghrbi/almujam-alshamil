@@ -81,8 +81,9 @@ export default function Navbar() {
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="md:hidden p-2 rounded-xl text-surface-500 hover:bg-surface-100 dark:hover:bg-surface-700 transition-all"
-            >
-              {menuOpen ? <X size={20} /> : <Menu size={20} />}
+               aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
+              >
+             {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
