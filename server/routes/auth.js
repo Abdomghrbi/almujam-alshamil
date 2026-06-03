@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const { authenticateToken } = require('../middleware/auth');
+const crypto = require('crypto');
+const { sendPasswordResetEmail } = require('../services/emailService');
 
 if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET is missing in environment variables');
@@ -10,10 +12,7 @@ if (!process.env.JWT_SECRET) {
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// ============================================
 // REGISTER
-// ============================================
-
 router.post('/register', async (req, res) => {
   try {
     const {
@@ -107,10 +106,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// ============================================
 // LOGIN
-// ============================================
-
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -187,10 +183,8 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// ============================================
-// CURRENT USER
-// ============================================
 
+// CURRENT USER
 router.get('/me', authenticateToken, async (req, res) => {
   try {
     const pool = req.app.locals.pool;
@@ -223,6 +217,79 @@ router.get('/me', authenticateToken, async (req, res) => {
   } catch (err) {
     console.error('Me error:', err);
     res.status(500).json({ error: 'خطأ في جلب بيانات المستخدم' });
+  }
+});
+
+// FORGOT PASSWORD
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const pool = req.app.locals.pool;
+
+    if (!email) {
+      return res.status(400).json({
+        error: 'البريد الإلكتروني مطلوب'
+      });
+    }
+
+    const userResult = await pool.query(
+      `
+      SELECT id, email
+      FROM users
+      WHERE email = $1
+      LIMIT 1
+      `,
+      [email]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.json({
+        message: 'إذا كان البريد مسجلاً فستصلك رسالة إعادة التعيين'
+      });
+    }
+
+    const user = userResult.rows[0];
+
+    const token = crypto.randomBytes(32).toString('hex');
+
+    const expiresAt = new Date(
+      Date.now() + 60 * 60 * 1000
+    );
+
+    await pool.query(
+      `
+      INSERT INTO password_reset_tokens (
+        user_id,
+        token,
+        expires_at
+      )
+      VALUES ($1, $2, $3)
+      `,
+      [
+        user.id,
+        token,
+        expiresAt
+      ]
+    );
+
+    const resetLink =
+      `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+
+    await sendPasswordResetEmail(
+      user.email,
+      resetLink
+    );
+
+    res.json({
+      message: 'إذا كان البريد مسجلاً فستصلك رسالة إعادة التعيين'
+    });
+
+  } catch (err) {
+    console.error('Forgot password error:', err);
+
+    res.status(500).json({
+      error: 'خطأ أثناء معالجة الطلب'
+    });
   }
 });
 
