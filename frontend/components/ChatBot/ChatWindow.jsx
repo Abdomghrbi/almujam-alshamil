@@ -80,8 +80,8 @@ export default function ChatWindow({ user, onClose }) {
             </svg>
           </div>
           <div>
-            <h3 className="text-white font-bold text-lg">معجمي 🤖</h3>
-            <p className="text-emerald-100 text-xs">مساعد المعجم الشامل</p>
+            <h3 className="text-white font-bold text-lg">🤖</h3>
+            <p className="text-emerald-100 text-xs">مُعجَميّ</p>
           </div>
         </div>
         <button 
