@@ -9,7 +9,7 @@ export default function ChatWindow({ user, onClose }) {
   const [messages, setMessages] = useState([
     {
       id: 0,
-      text: `مرحباً يا ${user?.username || 'صديقي'}! 👋\n\nأنا "مُعجَميّ"، مساعدك الشخصي في منصة المعجم الشامل. أنا هنا لأساعدك في استكشاف المعجم وإضافة كلمات جديدة.\n\nما هي الكلمة التي تريد إضافتها اليوم؟ ✨`,
+      text: `مرحباً يا ${user?.username || 'صديقي'}! 👋\n\nأنا مساعدك الشخصي في منصة المعجم الشامل. أنا هنا لأساعدك في استكشاف المعجم وإضافة كلمات جديدة.\n\nما هي الكلمة التي تريد إضافتها اليوم؟ ✨`,
       isUser: false
     }
   ]);
@@ -143,7 +143,6 @@ export default function ChatWindow({ user, onClose }) {
         </svg>
           </div>
           <div>
-            <h3 className="text-white font-bold text-lg">🤖</h3>
             <p className="text-emerald-100 text-xs">المساعد الذكي</p>
           </div>
         </div>
