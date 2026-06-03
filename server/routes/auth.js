@@ -293,4 +293,94 @@ router.post('/forgot-password', async (req, res) => {
   }
 });
 
+// RESET PASSWORD
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    const pool = req.app.locals.pool;
+
+    if (!token || !password) {
+      return res.status(400).json({
+        error: 'التوكن وكلمة المرور مطلوبان'
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        error: 'كلمة المرور يجب أن تكون 6 أحرف على الأقل'
+      });
+    }
+
+    const tokenResult = await pool.query(
+      `
+      SELECT
+        id,
+        user_id,
+        expires_at,
+        used
+      FROM password_reset_tokens
+      WHERE token = $1
+      LIMIT 1
+      `,
+      [token]
+    );
+
+    if (tokenResult.rows.length === 0) {
+      return res.status(400).json({
+        error: 'رابط إعادة التعيين غير صالح'
+      });
+    }
+
+    const resetToken = tokenResult.rows[0];
+
+    if (resetToken.used) {
+      return res.status(400).json({
+        error: 'تم استخدام الرابط مسبقاً'
+      });
+    }
+
+    if (new Date(resetToken.expires_at) < new Date()) {
+      return res.status(400).json({
+        error: 'انتهت صلاحية الرابط'
+      });
+    }
+
+    const password_hash = await bcrypt.hash(password, 12);
+
+    await pool.query(
+      `
+      UPDATE users
+      SET
+        password_hash = $1,
+        updated_at = NOW()
+      WHERE id = $2
+      `,
+      [
+        password_hash,
+        resetToken.user_id
+      ]
+    );
+
+    await pool.query(
+      `
+      UPDATE password_reset_tokens
+      SET used = TRUE
+      WHERE id = $1
+      `,
+      [resetToken.id]
+    );
+
+    res.json({
+      message: 'تم تغيير كلمة المرور بنجاح'
+    });
+
+  } catch (err) {
+    console.error('Reset password error:', err);
+
+    res.status(500).json({
+      error: 'خطأ أثناء إعادة تعيين كلمة المرور'
+    });
+  }
+});
+
 module.exports = router;
