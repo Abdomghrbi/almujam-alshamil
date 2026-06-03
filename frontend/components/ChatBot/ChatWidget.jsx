@@ -12,11 +12,11 @@ export default function ChatWidget({ user }) {
       {/* زر الروبوت */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 left-6 z-50 w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+        className="fixed bottom-6 left-6 z-50 w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
         aria-label="فتح المحادثة"
       >
         <svg 
-          className="w-7 h-7 text-white group-hover:rotate-12 transition-transform" 
+          className="w-5 h-5 text-white group-hover:rotate-12 transition-transform" 
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24"
