@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Search, BookOpen, Mic, Globe2, Users, ArrowLeft, Sparkles } from 'lucide-react';
+import ChatWidget from '../components/ChatBot/ChatWidget';
 import { useAuth } from './layout';
 
 
@@ -212,9 +213,10 @@ export default function HomePage() {
               شاهد الكود المصدر
             </a>
           </div>
-
         </div>
       </section>
+       {/* Chat Widget */}
+      <ChatWidget user={user} />
     </div>
   );
 }
