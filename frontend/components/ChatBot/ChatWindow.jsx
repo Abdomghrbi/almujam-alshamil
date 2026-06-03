@@ -43,8 +43,8 @@ export default function ChatWindow({ user, onClose }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          message: text,
-          username: user?.name || 'صديقي'
+        message: text,
+       username: user?.username || 'صديقي'
         })
       });
 
