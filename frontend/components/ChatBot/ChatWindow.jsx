@@ -75,9 +75,72 @@ export default function ChatWindow({ user, onClose }) {
       <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
+            <svg 
+          className="w-7 h-7 text-white group-hover:rotate-12 transition-transform"
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+          style={{ width: '28px', height: '28px' }}
+        >
+          {/* رأس الروبوت */}
+          <rect 
+            x="6" 
+            y="7" 
+            width="12" 
+            height="12" 
+            rx="2" 
+            strokeWidth="1.7" 
+            strokeLinecap="round"
+          />
+          
+          {/* عيون */}
+          <circle cx="10" cy="11.5" r="1" fill="currentColor" stroke="none"/>
+          <circle cx="14" cy="11.5" r="1" fill="currentColor" stroke="none"/>
+          
+          {/* فم */}
+          <path 
+            d="M9 16 L15 16" 
+            strokeWidth="1.5" 
+            strokeLinecap="round"
+          />
+          
+          {/* أذن يسرى */}
+          <rect 
+            x="3" 
+            y="10" 
+            width="2" 
+            height="5" 
+            rx="0.5" 
+            strokeWidth="1.7"
+          />
+          
+          {/* أذن يمنى */}
+          <rect 
+            x="19" 
+            y="10" 
+            width="2" 
+            height="5" 
+            rx="0.5" 
+            strokeWidth="1.7"
+          />
+          
+          {/* هوائي */}
+          <line 
+            x1="12" 
+            y1="7" 
+            x2="12" 
+            y2="4" 
+            strokeWidth="1.7" 
+            strokeLinecap="round"
+          />
+          <circle 
+            cx="12" 
+            cy="3.2" 
+            r="1" 
+            fill="currentColor" 
+            stroke="none"
+          />
+        </svg>
           </div>
           <div>
             <h3 className="text-white font-bold text-lg">🤖</h3>
