@@ -132,8 +132,8 @@ export default function RootLayout({ children }) {
       <body className="min-h-screen flex flex-col">
         <AuthContext.Provider value={{ user, login, logout, darkMode, toggleDarkMode }}>
           <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <main className="flex-1 min-h-screen">{children}</main>
+  <Footer />
         </AuthContext.Provider>
       </body>
     </html>
