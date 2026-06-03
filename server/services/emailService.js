@@ -28,10 +28,6 @@ async function sendPasswordResetEmail(email, resetLink) {
               <h1 style="margin:0;color:white;font-size:28px;">
                 المعجم الشامل
               </h1>
-
-              <p style="margin-top:10px;color:rgba(255,255,255,.9);font-size:14px;">
-                منصة عربية لحفظ وتوثيق الكلمات والمعاني واللهجات
-              </p>
             </td>
           </tr>
 
@@ -44,11 +40,11 @@ async function sendPasswordResetEmail(email, resetLink) {
               </h2>
 
               <p style="color:#475569;line-height:1.9;">
-                تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بحسابك في المعجم الشامل.
+                تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بحسابك.
               </p>
 
               <p style="color:#475569;line-height:1.9;">
-                اضغط على الزر التالي لإنشاء كلمة مرور جديدة:
+                اضغط على الزر التالي وتابع الخطوات لإنشاء كلمة مرور جديدة:
               </p>
 
               <div style="text-align:center;margin:35px 0;">
