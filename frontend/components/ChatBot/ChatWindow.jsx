@@ -81,7 +81,7 @@ export default function ChatWindow({ user, onClose }) {
           </div>
           <div>
             <h3 className="text-white font-bold text-lg">🤖</h3>
-            <p className="text-emerald-100 text-xs">مُعجَميّ</p>
+            <p className="text-emerald-100 text-xs">المساعد الذكي</p>
           </div>
         </div>
         <button 
