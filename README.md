@@ -38,59 +38,6 @@
 
 ---
 
-## 📁 هيكل المشروع الكامل
-
-```
-almujam-alshamil/
-├── server/                    # Backend (Node.js + Express)
-│   ├── index.js               # نقطة البداية
-│   ├── routes/
-│   │   ├── auth.js            # تسجيل + دخول (JWT)
-│   │   ├── words.js           # إنشاء + عرض الكلمات
-│   │   ├── moderation.js      # قبول/رفض المحتوى
-│   │   └── search.js          # بحث + اقتراحات
-│   ├── middleware/
-│   │   └── auth.js            # middleware للتوثيق
-│   └── config/
-│       └── db.js              # اتصال PostgreSQL
-├── frontend/                  # Frontend (Next.js)
-│   ├── app/
-│   │   ├── layout.js          # Navbar + Footer + AuthContext + Dark mode
-│   │   ├── page.js            # الصفحة الرئيسية
-│   │   ├── globals.css        # Tailwind + custom styles
-│   │   ├── search/
-│   │   │   ├── page.js        # صفحة البحث + الفلترة
-│   │   │   └── [word]/
-│   │   │       └── page.js    # تفاصيل الكلمة
-│   │   ├── add/
-│   │   │   └── page.js        # إضافة كلمة جديدة + تسجيل صوتي
-│   │   ├── auth/
-│   │   │   ├── login/
-│   │   │   │   └── page.js    # تسجيل الدخول
-│   │   │   └── register/
-│   │   │       └── page.js    # إنشاء حساب جديد
-│   │   └── moderation/
-│   │       └── page.js        # لوحة الإشراف (للمشرفين فقط)
-│   ├── components/
-│   │   ├── Navbar.js          # شريط التنقل
-│   │   ├── Footer.js          # الفوتر
-│   │   ├── SearchBar.js       # شريط بحث مع اقتراحات فورية
-│   │   ├── WordCard.js        # بطاقة عرض الكلمة في نتائج البحث
-│   │   ├── LocationPicker.js  # اختيار متسلسل: بلد → محافظة → منطقة (22 دولة)
-│   │   └── AudioRecorder.js   # تسجيل صوتي مباشر من المايكروفون
-│   └── lib/
-│       └── api.js             # Axios client مع JWT interceptor
-├── docs/
-│   └── schema.sql             # PostgreSQL schema (5 جداول)
-├── public/                    # Static assets
-├── package.json               # Root package (server)
-├── README.md
-├── CONTRIBUTING.md
-├── LICENSE                    # MIT
-└── .env.example
-```
-
----
 
 ##  تشغيل المشروع
 
@@ -110,12 +57,6 @@ npm run dev
 cd frontend
 npm install
 npm run dev
-```
-
-###  قاعدة البيانات
-```bash
-# أنشئ قاعدة بيانات postgres و run:
-psql -d almujam_shamil -f docs/schema.sql
 ```
 
 ---
