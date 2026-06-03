@@ -134,9 +134,9 @@ export default function HomePage() {
                 <div className={`w-12 h-12 mx-auto mb-3 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-md`}>
                   <stat.icon size={22} className="text-white" />
                 </div>
-                <div className="text-3xl font-bold text-surface-800 dark:text-white mb-1">
+                 <div className="text-3xl font-bold text-surface-800 dark:text-white mb-1 min-w-[6ch] inline-block text-center">
                   {formatStatValue(stats[stat.key])}
-                </div>
+                 </div>
                 <div className="text-sm text-surface-500">{stat.label}</div>
               </div>
             ))}
