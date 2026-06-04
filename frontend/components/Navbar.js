@@ -30,9 +30,6 @@ export default function Navbar() {
               <span className="text-xl font-bold bg-gradient-to-l from-primary-600 to-accent-600 bg-clip-text text-transparent">
                 المُعجم الشامل
               </span>
-              <span className="text-[11px] text-surface-400 dark:text-surface-500 -mt-0.5">
-                موسوعة الكلمات واللهجات
-              </span>
             </div>
           </Link>
 
@@ -41,9 +38,9 @@ export default function Navbar() {
             {navLinks.map((link) => (
               <Link
                 key={link.href}
-                href={link.href}
+               href={link.href}
                 className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-surface-600 dark:text-surface-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all text-sm font-medium"
-              >
+             >
                 <link.icon size={16} />
                 {link.label}
               </Link>
@@ -73,7 +70,7 @@ export default function Navbar() {
               </div>
             ) : (
               <Link href="/auth/login" className="btn-primary !py-1.5 !px-4 !text-sm hidden md:block">
-                دخول
+                تسجيل دخول
               </Link>
             )}
 
