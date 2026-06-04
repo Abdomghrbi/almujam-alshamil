@@ -98,7 +98,7 @@ export default function HomePage() {
               <input
                 type="text"
                 name="q"
-                placeholder="ابحث عن كلمة، لهجة، أو جذر…"
+                placeholder="إبحث عن كلمة، لهجة، أو جذر…"
                 className="w-full pr-12 pl-4 py-4 text-lg rounded-2xl border-2 border-surface-200 dark:border-surface-600 bg-white dark:bg-surface-800 focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all shadow-lg shadow-primary-500/5"
               />
             </form>
