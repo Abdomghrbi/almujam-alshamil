@@ -75,7 +75,7 @@ export default function Footer() {
               تواصل معنا:
             </p>
             <a
-              href="mailto:moderation@example.com"
+              href="mailto: abdomghrbi@gmail.com"
               className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline"
             >
               <Mail size={16} />
