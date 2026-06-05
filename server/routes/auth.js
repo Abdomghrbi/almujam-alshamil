@@ -400,7 +400,7 @@ router.get(
       `${process.env.FRONTEND_URL}/auth/login`
   }),
   async (req, res) => {
-    res.send('Google Login Success');
+    res.json(req.user);
   }
 );
 
