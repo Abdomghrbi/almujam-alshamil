@@ -128,7 +128,6 @@ export default function RegisterPage() {
            </div>
          </div>
 
-              // button sign-up weth Google
           <a href="https://almujam-alshamil-api.onrender.com/api/auth/google"
             className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-surface-300 dark:border-surface-700 bg-white dark:bg-surface-800 hover:bg-surface-50 dark:hover:bg-surface-700 transition-all duration-200 shadow-sm">
              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
