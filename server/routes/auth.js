@@ -400,7 +400,108 @@ router.get(
       `${process.env.FRONTEND_URL}/auth/login`
   }),
   async (req, res) => {
-    res.json(req.user);
+    try {
+      const pool = req.app.locals.pool;
+
+      const googleId = req.user.id;
+      const email = req.user.emails[0].value;
+      const displayName = req.user.displayName;
+      const avatarUrl = req.user.photos?.[0]?.value || null;
+
+      let user;
+
+      const existingGoogle = await pool.query(
+        `
+        SELECT *
+        FROM users
+        WHERE google_id = $1
+        LIMIT 1
+        `,
+        [googleId]
+      );
+
+      if (existingGoogle.rows.length > 0) {
+        user = existingGoogle.rows[0];
+      } else {
+        const existingEmail = await pool.query(
+          `
+          SELECT *
+          FROM users
+          WHERE email = $1
+          LIMIT 1
+          `,
+          [email]
+        );
+
+        if (existingEmail.rows.length > 0) {
+          user = existingEmail.rows[0];
+
+          await pool.query(
+            `
+            UPDATE users
+            SET google_id = $1
+            WHERE id = $2
+            `,
+            [googleId, user.id]
+          );
+        } else {
+          const randomPassword =
+            await bcrypt.hash(
+              crypto.randomBytes(32).toString('hex'),
+              12
+            );
+
+          const username =
+            email.split('@')[0];
+
+          const created = await pool.query(
+            `
+            INSERT INTO users (
+              username,
+              email,
+              password_hash,
+              display_name,
+              avatar_url,
+              google_id
+            )
+            VALUES ($1,$2,$3,$4,$5,$6)
+            RETURNING *
+            `,
+            [
+              username,
+              email,
+              randomPassword,
+              displayName,
+              avatarUrl,
+              googleId
+            ]
+          );
+
+          user = created.rows[0];
+        }
+      }
+
+      const token = jwt.sign(
+        {
+          id: user.id,
+          username: user.username,
+          role: user.role
+        },
+        JWT_SECRET,
+        { expiresIn: '7d' }
+      );
+
+      res.redirect(
+        `${process.env.FRONTEND_URL}/auth/google-success?token=${token}`
+      );
+
+    } catch (err) {
+      console.error(err);
+
+      res.redirect(
+        `${process.env.FRONTEND_URL}/auth/login`
+      );
+    }
   }
 );
 
