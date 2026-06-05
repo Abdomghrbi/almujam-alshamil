@@ -99,7 +99,7 @@ export default function LoginPage() {
     <div className="relative">
       <Lock
         size={16}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400"/
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400"/>
       <input
         type="password"
         value={form.password}
