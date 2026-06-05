@@ -96,7 +96,17 @@ export default function RootLayout({ children }) {
     return (
       <html lang="ar" dir="rtl">
         <body className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-500 border-t-transparent"></div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-pulse">
+         <img src="/logo.png"alt="المعجم الشامل" className="w-24 h-24"/>
+       </div>
+        <h2 className="text-lg font-bold">
+        المعجم الشامل
+       </h2>
+        <p className="text-sm text-surface-500">
+         جاري تحميل المحتوى...
+        </p>
+       </div>
         </body>
       </html>
     );
