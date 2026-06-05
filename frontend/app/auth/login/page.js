@@ -64,11 +64,6 @@ export default function LoginPage() {
               <LogIn size={24} className="text-white" />
             </div>
             <h1 className="text-2xl font-bold text-surface-900 dark:text-white">تسجيل الدخول</h1>
-           <a
-             href="https://almujam-alshamil-api.onrender.com/api/auth/google"
-            className="w-full flex items-center justify-center gap-2 border rounded-xl py-3 hover:bg-gray-50">
-           <span>متابعة باستخدام Google</span>
-           </a>
             <p className="text-surface-500 text-sm mt-1">ساهم في إثراء المعجم الشامل</p>
           </div>
 
@@ -125,6 +120,9 @@ export default function LoginPage() {
         placeholder="أدخل كلمة المرور"
       />
     </div>
+          <a href="https://almujam-alshamil-api.onrender.com/api/auth/google"className="w-full flex items-center justify-center gap-2 border rounded-xl py-3 hover:bg-gray-50">
+           <span>متابعة باستخدام Google</span>
+           </a>
 
     <div className="mt-2 text-left">
       <Link
