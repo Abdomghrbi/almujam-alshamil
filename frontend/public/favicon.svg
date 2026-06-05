@@ -2,12 +2,35 @@
   <title id="title">المعجم الشامل</title>
   <desc id="desc">أيقونة كتاب متدرجة اللون تمثل المعجم الشامل.</desc>
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#4f46e5" />
       <stop offset="100%" stop-color="#f97316" />
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="16" fill="url(#g)" />
-  <path d="M18 20h19a5 5 0 0 1 5 5v20a5 5 0 0 0-5-5H18z" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round" />
-  <path d="M46 20H33a5 5 0 0 0-5 5v20a5 5 0 0 1 5-5h13z" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round" />
+  
+  <!-- الغلاف الخارجي -->
+  <rect x="8" y="12" width="48" height="40" rx="3" fill="url(#g)" stroke="#333" stroke-width="1"/>
+  
+  <!-- صفحة الكتاب اليسرى -->
+  <path d="M8 12 L8 52 L20 52 L20 12 Z" fill="#ffffff" stroke="#333" stroke-width="1"/>
+  
+  <!-- صفحة الكتاب اليمنى -->
+  <path d="M20 12 L20 52 L56 52 L56 12 Z" fill="#f8f8f8" stroke="#333" stroke-width="1"/>
+  
+  <!-- خطوط النص على الصفحات -->
+  <line x1="12" y1="20" x2="16" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="12" y1="25" x2="18" y2="25" stroke="#333" stroke-width="1"/>
+  <line x1="12" y1="30" x2="15" y2="30" stroke="#333" stroke-width="1"/>
+  
+  <line x1="24" y1="20" x2="52" y2="20" stroke="#666" stroke-width="1"/>
+  <line x1="24" y1="25" x2="48" y2="25" stroke="#666" stroke-width="1"/>
+  <line x1="24" y1="30" x2="50" y2="30" stroke="#666" stroke-width="1"/>
+  
+  <!-- خط التسطير للصفحة اليسرى -->
+  <line x1="12" y1="38" x2="18" y2="38" stroke="#4f46e5" stroke-width="2"/>
+  <line x1="12" y1="42" x2="16" y2="42" stroke="#4f46e5" stroke-width="2"/>
+  
+  <!-- خط التسطير للصفحة اليمنى -->
+  <line x1="24" y1="38" x2="52" y2="38" stroke="#f97316" stroke-width="2"/>
+  <line x1="24" y1="42" x2="48" y2="42" stroke="#f97316" stroke-width="2"/>
 </svg>
