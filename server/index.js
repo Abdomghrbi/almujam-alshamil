@@ -8,9 +8,11 @@ const moderationRoutes = require('./routes/moderation');
 const searchRoutes = require('./routes/search');
 const statsRoutes = require('./routes/stats');
 const chatRoutes = require('./routes/chat');
+const passport = require('./config/passport');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(passport.initialize());
 
 // Database connection
 const pool = new Pool({
