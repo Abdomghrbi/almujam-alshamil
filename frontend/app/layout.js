@@ -91,8 +91,7 @@ export default function RootLayout({ children }) {
       }
     ]
   };
-
-  if (loading) {
+  
   if (loading) {
   return (
     <html lang="ar" dir="rtl">
