@@ -116,7 +116,9 @@ export default function RegisterPage() {
               {loading ? 'جاري التسجيل…' : 'إنشاء الحساب'}
             </button>
           </form>
-
+          <a href="https://almujam-alshamil-api.onrender.com/api/auth/google"className="w-full flex items-center justify-center gap-2 border rounded-xl py-3 hover:bg-gray-50">
+           <span>متابعة باستخدام Google</span>
+           </a>
           <div className="text-center mt-4 text-sm text-surface-500">
             لديك حساب بالفعل؟{' '}
             <Link href="/auth/login" className="text-primary-600 hover:text-primary-700 font-medium">تسجيل الدخول</Link>
