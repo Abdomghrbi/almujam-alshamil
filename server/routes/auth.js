@@ -5,6 +5,7 @@ const router = express.Router();
 const { authenticateToken } = require('../middleware/auth');
 const crypto = require('crypto');
 const { sendPasswordResetEmail } = require('../services/emailService');
+const passport = require('../config/passport');
 
 if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET is missing in environment variables');
@@ -382,5 +383,25 @@ router.post('/reset-password', async (req, res) => {
     });
   }
 });
+// GOOGLE LOGIN
+router.get(
+  '/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'email']
+  })
+);
+
+// GOOGLE CALLBACK
+router.get(
+  '/google/callback',
+  passport.authenticate('google', {
+    session: false,
+    failureRedirect:
+      `${process.env.FRONTEND_URL}/auth/login`
+  }),
+  async (req, res) => {
+    res.send('Google Login Success');
+  }
+);
 
 module.exports = router;
