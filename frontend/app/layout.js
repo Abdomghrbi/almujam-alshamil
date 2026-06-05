@@ -98,7 +98,7 @@ export default function RootLayout({ children }) {
         <body className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center gap-4">
           <div className="animate-pulse">
-         <img src="/logo.png"alt="المعجم الشامل" className="w-24 h-24"/>
+      </* <img src="/logo.png"alt="المعجم الشامل" className="w-24 h-24"/>*/>
        </div>
         <h2 className="text-lg font-bold">
         المعجم الشامل
