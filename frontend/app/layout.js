@@ -98,7 +98,7 @@ export default function RootLayout({ children }) {
       <body className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center gap-4">
           <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-orange-500 rounded-lg animate-pulse flex items-center justify-center">
-            <span className="text-white text-2xl font-bold">ق</span>
+            <span className="text-white text-2xl font-bold">⚙️</span>
           </div>
           <h2 className="text-lg font-bold">المعجم الشامل</h2>
           <p className="text-sm text-surface-500">جاري تحميل المحتوى...</p>
