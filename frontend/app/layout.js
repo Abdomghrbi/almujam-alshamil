@@ -93,24 +93,37 @@ export default function RootLayout({ children }) {
   };
 
   if (loading) {
-    return (
-      <html lang="ar" dir="rtl">
-        <body className="flex items-center justify-center min-h-screen">
+  return (
+    <html lang="ar" dir="rtl">
+      <body className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center gap-4">
-          <div className="animate-pulse">
-      </* <img src="/logo.png"alt="المعجم الشامل" className="w-24 h-24"/>*/>
-       </div>
-        <h2 className="text-lg font-bold">
-        المعجم الشامل
-       </h2>
-        <p className="text-sm text-surface-500">
-         جاري تحميل المحتوى...
-        </p>
-       </div>
-        </body>
-      </html>
-    );
-  }
+          <div className="w-24 h-24 relative">
+            <svg className="w-24 h-24 animate-spin-slow" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="bookGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#4f46e5" />
+                  <stop offset="100%" stopColor="#f97316" />
+                </linearGradient>
+              </defs>
+              <rect x="8" y="12" width="48" height="40" rx="3" fill="url(#bookGradient)" stroke="#333" strokeWidth="1"/>
+              <path d="M8 12 L8 52 L20 52 L20 12 Z" fill="#ffffff" stroke="#333" strokeWidth="1"/>
+              <path d="M20 12 L20 52 L56 52 L56 12 Z" fill="#f8f8f8" stroke="#333" strokeWidth="1"/>
+              <line x1="12" y1="20" x2="16" y2="20" stroke="#333" strokeWidth="1"/>
+              <line x1="12" y1="25" x2="18" y2="25" stroke="#333" strokeWidth="1"/>
+              <line x1="12" y1="30" x2="15" y2="30" stroke="#333" strokeWidth="1"/>
+              <line x1="24" y1="20" x2="52" y2="20" stroke="#666" strokeWidth="1"/>
+              <line x1="24" y1="25" x2="48" y2="25" stroke="#666" strokeWidth="1"/>
+              <line x1="24" y1="30" x2="50" y2="30" stroke="#666" strokeWidth="1"/>
+            </svg>
+          </div>
+          <h2 className="text-lg font-bold">المعجم الشامل</h2>
+          <p className="text-sm text-surface-500">جاري تحميل المحتوى...</p>
+        </div>
+      </body>
+    </html>
+  );
+}
+
 
   return (
     <html lang="ar" dir="rtl" className={darkMode ? 'dark' : ''}>
