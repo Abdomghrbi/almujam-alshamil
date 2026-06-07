@@ -100,7 +100,9 @@ export default function RootLayout({ children }) {
       <body className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center gap-4">
           <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-orange-500 rounded-lg animate-pulse flex items-center justify-center">
-            
+           <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all ring-1 ring-white/30">
+              <BookOpen size={20} className="text-white" />
+            </div>  
           </div>
           <h2 className="text-lg font-bold">المعجم الشامل</h2>
           <p className="text-sm text-surface-500">جاري تحميل المحتوى...</p>
