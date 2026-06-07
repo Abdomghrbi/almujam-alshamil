@@ -79,7 +79,7 @@ export default function Footer() {
               className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline"
             >
               <Mail size={16} />
-              moderation@example.com
+              moderation@support.com
             </a>
           </div>
 
