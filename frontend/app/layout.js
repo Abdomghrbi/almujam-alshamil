@@ -12,9 +12,6 @@ export const AuthContext = createContext();
 export function useAuth() {
   return useContext(AuthContext);
 }
-const navLinks = [
-    const navLinks = [
-    { href: '/', icon: BookOpen },
 
 export default function RootLayout({ children }) {
   const [user, setUser] = useState(null);
