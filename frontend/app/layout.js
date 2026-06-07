@@ -4,6 +4,8 @@ import { useState, useEffect, createContext, useContext } from 'react';
 import './globals.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { BookOpen } from 'lucide-react';
+
 
 export const AuthContext = createContext();
 
