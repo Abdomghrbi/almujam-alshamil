@@ -537,4 +537,71 @@ router.get(
   }
 );
 
+// UPDATE PROFILE
+router.put(
+  '/profile',
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const pool = req.app.locals.pool;
+
+      const {
+        display_name,
+        bio,
+        avatar_url
+      } = req.body;
+
+      const result = await pool.query(
+        `
+        UPDATE users
+        SET
+          display_name = $1,
+          bio = $2,
+          avatar_url = $3,
+          updated_at = NOW()
+        WHERE id = $4
+        RETURNING
+          id,
+          username,
+          email,
+          display_name,
+          bio,
+          avatar_url,
+          role,
+          is_active,
+          created_at,
+          updated_at
+        `,
+        [
+          display_name || null,
+          bio || null,
+          avatar_url || null,
+          req.user.id
+        ]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          error: 'المستخدم غير موجود'
+        });
+      }
+
+      res.json({
+        message: 'تم تحديث الملف الشخصي بنجاح',
+        user: result.rows[0]
+      });
+
+    } catch (err) {
+      console.error(
+        'Update profile error:',
+        err
+      );
+
+      res.status(500).json({
+        error: 'خطأ أثناء تحديث الملف الشخصي'
+      });
+    }
+  }
+);
+
 module.exports = router;
