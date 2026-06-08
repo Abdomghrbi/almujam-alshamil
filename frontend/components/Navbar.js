@@ -57,7 +57,7 @@ export default function Navbar() {
               {darkMode ? <Sun size={18} /> : <Moon size={18} />}
             </button>
 
-            {/* === الكود المصلح من هون === */}
+            {/* get profile data*/}
             {user ? (
               <div className="hidden md:flex items-center gap-3">
                 <Link href="/profile">
@@ -93,7 +93,7 @@ export default function Navbar() {
                 تسجيل دخول
               </Link>
             )}
-            {/* === لـ هون === */}
+            
 
             {/* Mobile menu button */}
             <button onClick={() => setMenuOpen(!menuOpen)}
