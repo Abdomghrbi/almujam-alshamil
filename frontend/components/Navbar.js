@@ -58,25 +58,51 @@ export default function Navbar() {
             </button>
 
             {user ? (
-              <div className="hidden md:flex items-center gap-3">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary-50 dark:bg-primary-900/20">
-                  <User size={14} className="text-primary-600" />
-                  <span className="text-sm font-medium text-primary-700 dark:text-primary-300">{user.username}</span>
-                </div>
-                <button onClick={logout} className="btn-outline !py-1.5 !px-3 !text-sm">
-                  <LogOut size={14} className="inline ml-1" />
-                  خروج
-                </button>
-              </div>
-            ) : (
-              <Link href="/auth/login" className="btn-primary !py-1.5 !px-4 !text-sm hidden md:block">
-                تسجيل دخول
-              </Link>
-            )}
+  <div className="hidden md:flex items-center gap-3">
+
+    <Link href="/profile">
+      {user.avatar_url ? (
+        <img
+          src={user.avatar_url}
+          alt={user.display_name || user.username}
+          className="w-10 h-10 rounded-full object-cover border-2 border-primary-200 hover:scale-105 transition-all cursor-pointer"
+        />
+      ) : (
+        <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/20 flex items-center justify-center">
+          <User size={18} className="text-primary-600" />
+        </div>
+      )}
+    </Link>
+
+    <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary-50 dark:bg-primary-900/20">
+      <span className="text-sm font-medium text-primary-700 dark:text-primary-300">
+        {user.username}
+      </span>
+    </div>
+
+    <button
+      onClick={logout}
+      className="btn-outline !py-1.5 !px-3 !text-sm"
+    >
+      <LogOut size={14} className="inline ml-1" />
+      خروج
+    </button>
+
+  </div>
+    ) : (
+     <button onClick={logout} className="btn-outline !py-1.5 !px-3 !text-sm">
+       <LogOut size={14} className="inline ml-1" />
+             خروج
+        </button>
+      </div>
+        ) : (
+            <Link href="/auth/login" className="btn-primary !py-1.5 !px-4 !text-sm hidden md:block">
+            تسجيل دخول
+            </Link>
+           )}
 
             {/* Mobile menu button */}
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
+            <button onClick={() => setMenuOpen(!menuOpen)}
               className="md:hidden p-2 rounded-xl text-surface-500 hover:bg-surface-100 dark:hover:bg-surface-700 transition-all"
                aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
               >
