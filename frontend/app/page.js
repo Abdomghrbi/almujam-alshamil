@@ -62,6 +62,7 @@ export default function HomePage() {
     if (value === null || value === undefined) return '—';
     return Number(value).toLocaleString('ar-EG');
   };
+
   return (
     <div>
       {/* Hero Section */}
@@ -80,7 +81,7 @@ export default function HomePage() {
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-surface-900 dark:text-white mb-6 leading-tight">
             <span className="bg-gradient-to-l from-primary-600 to-accent-600 bg-clip-text text-transparent">
               المعجم الشامل
-          /span>
+            </span>
           </h1>
 
           <p className="text-lg sm:text-xl text-surface-500 dark:text-surface-400 max-w-2xl mx-auto mb-8 leading-relaxed">
