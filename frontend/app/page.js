@@ -62,7 +62,7 @@ export default function HomePage() {
     if (value === null || value === undefined) return '—';
     return Number(value).toLocaleString('ar-EG');
   };
-
+alert(localStorage.getItem('token'));
   return (
     <div>
       {/* Hero Section */}
