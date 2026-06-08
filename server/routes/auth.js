@@ -13,6 +13,33 @@ if (!process.env.JWT_SECRET) {
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+async function generateUniqueUsername(
+  pool,
+  baseUsername
+) {
+  let username = baseUsername;
+  let counter = 1;
+
+  while (true) {
+    const result = await pool.query(
+      `
+      SELECT id
+      FROM users
+      WHERE username = $1
+      LIMIT 1
+      `,
+      [username]
+    );
+
+    if (result.rows.length === 0) {
+      return username;
+    }
+
+    username = `${baseUsername}${counter}`;
+    counter++;
+  }
+}
+
 // REGISTER
 router.post('/register', async (req, res) => {
   try {
@@ -451,8 +478,13 @@ router.get(
               12
             );
 
+          const baseUsername =
+           email.split('@')[0];
+
           const username =
-            email.split('@')[0];
+          await generateUniqueUsername(
+           pool, baseUsername
+          );
 
           const created = await pool.query(
             `
