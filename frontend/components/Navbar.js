@@ -103,36 +103,13 @@ export default function Navbar() {
             ))}
             <div className="border-t border-surface-200 dark:border-surface-700 pt-2 mt-2">
               {user ? (
-  <div className="hidden md:flex items-center gap-3">
-
-    <Link href="/profile">
-      {user.avatar_url ? (
-        <img
-          src={user.avatar_url}
-          alt={user.display_name || user.username}
-          className="w-10 h-10 rounded-full object-cover border-2 border-primary-200 hover:scale-105 transition-all cursor-pointer"
-        />
-      ) : (
-        <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/20 flex items-center justify-center">
-          <User size={18} className="text-primary-600" />
-        </div>
-      )}
-    </Link>
-
-    <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary-50 dark:bg-primary-900/20">
-      <span className="text-sm font-medium text-primary-700 dark:text-primary-300">
-        {user.username}
-      </span>
-    </div>
-
-    <button onClick={logout} className="btn-outline !py-1.5 !px-3 !text-sm"
-      >
-      <LogOut size={14} className="inline ml-1" />
-      خروج
-    </button>
-
-   </div>
-    ) : (
+                <div className="space-y-2">
+                  <div className="px-3 py-2 text-sm text-surface-500">@{user.username}</div>
+                  <button onClick={() => { logout(); setMenuOpen(false); }} className="w-full text-right px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all text-sm font-medium">
+                    <LogOut size={16} className="inline ml-1" /> خروج
+                  </button>
+                </div>
+              ) : (
                 <Link href="/auth/login" onClick={() => setMenuOpen(false)} className="block w-full text-center btn-primary !py-2.5 !text-sm">
                   دخول / تسجيل
                 </Link>
