@@ -38,9 +38,9 @@ export default function Navbar() {
             {navLinks.map((link) => (
               <Link
                 key={link.href}
-               href={link.href}
+                href={link.href}
                 className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-surface-600 dark:text-surface-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all text-sm font-medium"
-             >
+              >
                 <link.icon size={16} />
                 {link.label}
               </Link>
@@ -57,56 +57,50 @@ export default function Navbar() {
               {darkMode ? <Sun size={18} /> : <Moon size={18} />}
             </button>
 
+            {/* === الكود المصلح من هون === */}
             {user ? (
-  <div className="hidden md:flex items-center gap-3">
+              <div className="hidden md:flex items-center gap-3">
+                <Link href="/profile">
+                  {user.avatar_url ? (
+                    <img
+                      src={user.avatar_url}
+                      alt={user.display_name || user.username}
+                      className="w-10 h-10 rounded-full object-cover border-2 border-primary-200 hover:scale-105 transition-all cursor-pointer"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/20 flex items-center justify-center">
+                      <User size={18} className="text-primary-600" />
+                    </div>
+                  )}
+                </Link>
 
-    <Link href="/profile">
-      {user.avatar_url ? (
-        <img
-          src={user.avatar_url}
-          alt={user.display_name || user.username}
-          className="w-10 h-10 rounded-full object-cover border-2 border-primary-200 hover:scale-105 transition-all cursor-pointer"
-        />
-      ) : (
-        <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/20 flex items-center justify-center">
-          <User size={18} className="text-primary-600" />
-        </div>
-      )}
-    </Link>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary-50 dark:bg-primary-900/20">
+                  <span className="text-sm font-medium text-primary-700 dark:text-primary-300">
+                    {user.username}
+                  </span>
+                </div>
 
-    <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary-50 dark:bg-primary-900/20">
-      <span className="text-sm font-medium text-primary-700 dark:text-primary-300">
-        {user.username}
-      </span>
-    </div>
-
-    <button
-      onClick={logout}
-      className="btn-outline !py-1.5 !px-3 !text-sm"
-    >
-      <LogOut size={14} className="inline ml-1" />
-      خروج
-    </button>
-
-  </div>
-    ) : (
-     <button onClick={logout} className="btn-outline !py-1.5 !px-3 !text-sm">
-       <LogOut size={14} className="inline ml-1" />
-             خروج
-        </button>
-      </div>
-        ) : (
-            <Link href="/auth/login" className="btn-primary !py-1.5 !px-4 !text-sm hidden md:block">
-            تسجيل دخول
-            </Link>
-           )}
+                <button
+                  onClick={logout}
+                  className="btn-outline !py-1.5 !px-3 !text-sm"
+                >
+                  <LogOut size={14} className="inline ml-1" />
+                  خروج
+                </button>
+              </div>
+            ) : (
+              <Link href="/auth/login" className="btn-primary !py-1.5 !px-4 !text-sm hidden md:block">
+                تسجيل دخول
+              </Link>
+            )}
+            {/* === لـ هون === */}
 
             {/* Mobile menu button */}
             <button onClick={() => setMenuOpen(!menuOpen)}
               className="md:hidden p-2 rounded-xl text-surface-500 hover:bg-surface-100 dark:hover:bg-surface-700 transition-all"
-               aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
-              >
-             {menuOpen ? <X size={20} /> : <Menu size={20} />}
+              aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
+            >
+              {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
