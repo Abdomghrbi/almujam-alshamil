@@ -57,9 +57,10 @@ export default function Navbar() {
               {darkMode ? <Sun size={18} /> : <Moon size={18} />}
             </button>
 
-            {/* get profile data*/}
+            {/* Profile section - pc & phone */}
             {user ? (
-              <div className="hidden md:flex items-center gap-3">
+              <div className="flex items-center gap-3">
+                {/* Profile photo - pc & phone */}
                 <Link href="/profile">
                   {user.avatar_url ? (
                     <img
@@ -73,8 +74,8 @@ export default function Navbar() {
                     </div>
                   )}
                 </Link>
-
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary-50 dark:bg-primary-900/20">
+                    
+                <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary-50 dark:bg-primary-900/20">
                   <span className="text-sm font-medium text-primary-700 dark:text-primary-300">
                     {user.username}
                   </span>
@@ -82,7 +83,7 @@ export default function Navbar() {
 
                 <button
                   onClick={logout}
-                  className="btn-outline !py-1.5 !px-3 !text-sm"
+                  className="hidden md:inline-flex btn-outline !py-1.5 !px-3 !text-sm"
                 >
                   <LogOut size={14} className="inline ml-1" />
                   خروج
@@ -93,7 +94,6 @@ export default function Navbar() {
                 تسجيل دخول
               </Link>
             )}
-            
 
             {/* Mobile menu button */}
             <button onClick={() => setMenuOpen(!menuOpen)}
