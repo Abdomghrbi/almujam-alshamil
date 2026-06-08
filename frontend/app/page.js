@@ -62,6 +62,24 @@ export default function HomePage() {
     if (value === null || value === undefined) return '—';
     return Number(value).toLocaleString('ar-EG');
   };
+
+   const token = localStorage.getItem('token');
+
+if (token) {
+  const copyToken = () => {
+    navigator.clipboard.writeText(token);
+    alert('تم نسخ التوكن');
+  };
+
+  const result = confirm(
+    `TOKEN:\n\n${token}\n\nاضغط موافق لنسخ التوكن`
+  );
+
+  if (result) {
+    copyToken();
+  }
+}
+  
   return (
     <div>
       {/* Hero Section */}
