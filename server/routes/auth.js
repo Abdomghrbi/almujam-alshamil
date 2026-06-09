@@ -433,7 +433,12 @@ router.get(
       const pool = req.app.locals.pool;
 
       const googleId = req.user.id;
-      const email = req.user.emails[0].value;
+      const email = req.user.emails?.[0]?.value;
+      if (!email) {
+        return res.redirect(
+          `${process.env.FRONTEND_URL}/auth/login?error=no_email`
+        );
+      }
       const displayName = req.user.displayName;
       const avatarUrl = req.user.photos?.[0]?.value || null;
 
