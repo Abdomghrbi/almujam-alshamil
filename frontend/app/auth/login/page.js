@@ -13,44 +13,50 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // useSearchParams)
+  // ✅ فحص رسائل الخطأ من URL
   useEffect(() => {
-  if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') return;
 
-  const params = new URLSearchParams(window.location.search);
-  const err = params.get('error');
+    const checkErrors = () => {
+      const params = new URLSearchParams(window.location.search);
+      const err = params.get('error');
 
-  if (err === 'google_cancelled') {
-    setError('تم إلغاء تسجيل الدخول. يرجى المحاولة مرة أخرى.');
-  } else if (err === 'no_email') {
-    setError('لم نتمكن من الحصول على البريد الإلكتروني من حساب Google.');
-  } else if (err === 'server_error') {
-    setError('حدث خطأ في الخادم. يرجى المحاولة لاحقاً.');
-  } else if (err === 'google_failed') {
-    setError('فشل تسجيل الدخول باستخدام Google.');
-  }
+      if (err === 'google_cancelled') {
+        setError('تم إلغاء تسجيل الدخول. يرجى المحاولة مرة أخرى.');
+      } else if (err === 'no_email') {
+        setError('لم نتمكن من الحصول على البريد الإلكتروني من حساب Google.');
+      } else if (err === 'server_error') {
+        setError('حدث خطأ في الخادم. يرجى المحاولة لاحقاً.');
+      } else if (err === 'google_failed') {
+        setError('فشل تسجيل الدخول باستخدام Google.');
+      }
 
+      // sessionStorage
+      const googleStarted = sessionStorage.getItem('google_auth_started');
+      const googleSuccess = sessionStorage.getItem('google_auth_success');
+      
+      console.log('Google started:', googleStarted);
+      console.log('Google success:', googleSuccess);
 
-  const googleStarted = sessionStorage.getItem('google_auth_started');
-  const googleSuccess = sessionStorage.getItem('google_auth_success');
-  
-  console.log('Google started:', googleStarted); // DEBUG
-  console.log('Google success:', googleSuccess); // DEBUG
+      if (googleStarted === 'true' && !googleSuccess && !err) {
+        setError('تم إلغاء تسجيل الدخول. يرجى المحاولة مرة أخرى.');
+      }
 
-  if (googleStarted === 'true' && !googleSuccess && !err) {
-    setError('تم إلغاء تسجيل الدخول. يرجى المحاولة مرة أخرى.');
-  }
+      sessionStorage.removeItem('google_auth_started');
+      sessionStorage.removeItem('google_auth_success');
 
-  // نظف الـ flags
-  sessionStorage.removeItem('google_auth_started');
-  sessionStorage.removeItem('google_auth_success');
+      if (err) {
+        window.history.replaceState({}, '', '/auth/login');
+      }
+    }
+    checkErrors();
+    window.addEventListener('pageshow', checkErrors);
 
-  // نظف الـ URL
-  if (err) {
-    window.history.replaceState({}, '', '/auth/login');
-  }
-}, []);
-
+    return () => {
+      window.removeEventListener('pageshow', checkErrors);
+    };
+  }, []);
+}
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
