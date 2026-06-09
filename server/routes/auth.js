@@ -423,6 +423,13 @@ router.get(
 // GOOGLE CALLBACK
 router.get(
   '/google/callback',
+  (req, res, next) => {
+    //  DEBUG Google 
+    console.log('=== GOOGLE CALLBACK ===');
+    console.log('Query params:', req.query);
+    console.log('User:', req.user);
+    next();
+  },
   passport.authenticate('google', {
     session: false,
     failureRedirect: `${process.env.FRONTEND_URL}/auth/login?error=google_cancelled`
