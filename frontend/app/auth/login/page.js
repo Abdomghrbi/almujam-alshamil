@@ -12,8 +12,7 @@ export default function LoginPage() {
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  // ✅ فحص رسائل الخطأ من URL
+  
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
