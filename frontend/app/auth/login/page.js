@@ -15,26 +15,41 @@ export default function LoginPage() {
 
   // useSearchParams)
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined') return;
 
-    const params = new URLSearchParams(window.location.search);
-    const err = params.get('error');
+  const params = new URLSearchParams(window.location.search);
+  const err = params.get('error');
 
-    if (err === 'google_cancelled') {
-      setError('تم إلغاء تسجيل الدخول. يرجى المحاولة مرة أخرى.');
-    } else if (err === 'no_email') {
-      setError('لم نتمكن من الحصول على البريد الإلكتروني من حساب Google.');
-    } else if (err === 'server_error') {
-      setError('حدث خطأ في الخادم. يرجى المحاولة لاحقاً.');
-    } else if (err === 'google_failed') {
-      setError('فشل تسجيل الدخول باستخدام Google.');
-    }
+  if (err === 'google_cancelled') {
+    setError('تم إلغاء تسجيل الدخول. يرجى المحاولة مرة أخرى.');
+  } else if (err === 'no_email') {
+    setError('لم نتمكن من الحصول على البريد الإلكتروني من حساب Google.');
+  } else if (err === 'server_error') {
+    setError('حدث خطأ في الخادم. يرجى المحاولة لاحقاً.');
+  } else if (err === 'google_failed') {
+    setError('فشل تسجيل الدخول باستخدام Google.');
+  }
 
-    // clear error parameter
-    if (err) {
-      window.history.replaceState({}, '', '/auth/login');
-    }
-  }, []);
+
+  const googleStarted = sessionStorage.getItem('google_auth_started');
+  const googleSuccess = sessionStorage.getItem('google_auth_success');
+  
+  console.log('Google started:', googleStarted); // DEBUG
+  console.log('Google success:', googleSuccess); // DEBUG
+
+  if (googleStarted === 'true' && !googleSuccess && !err) {
+    setError('تم إلغاء تسجيل الدخول. يرجى المحاولة مرة أخرى.');
+  }
+
+  // نظف الـ flags
+  sessionStorage.removeItem('google_auth_started');
+  sessionStorage.removeItem('google_auth_success');
+
+  // نظف الـ URL
+  if (err) {
+    window.history.replaceState({}, '', '/auth/login');
+  }
+}, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
