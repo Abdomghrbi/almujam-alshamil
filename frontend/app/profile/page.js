@@ -141,9 +141,9 @@ export default function ProfilePage() {
           className="space-y-4"
         >
 
-          <div>
+        <div className={isVisible ? 'block' : 'hidden'}>
             <label className="block mb-2 text-sm font-medium">
-              رابط الصورة الشخصية
+              الصورة الشخصية
             </label>
 
             <input
