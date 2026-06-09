@@ -425,14 +425,17 @@ router.get(
 router.get(
   '/google/callback',
   (req, res, next) => {
-    console.log('=== GOOGLE CALLBACK ===');
-    console.log('Query params:', req.query);
-    
-    //  Google error
+    // Check if Google error
     if (req.query.error === 'access_denied') {
-      console.log('User cancelled Google OAuth');
       return res.redirect(
         `${process.env.FRONTEND_URL}/auth/login?error=google_cancelled`
+      );
+    }
+    next();
+  },
+  passport.authenticate('google', {
+    session: false,
+    failureRedirect: `${process.env.FRONTEND_URL}/auth/login?error=google_failed`
       );
     }
     
