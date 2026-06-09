@@ -94,10 +94,10 @@ export default function HomePage() {
     navigator.clipboard.writeText(
       localStorage.getItem('token') || ''
     );
-    alert('تم نسخ التوكن');
+    alert('تم');
   }}
 >
-  نسخ التوكن
+  نسخ 
 </button>
   */}
           {/* Search Bar */}
