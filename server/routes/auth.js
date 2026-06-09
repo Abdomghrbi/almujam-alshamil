@@ -425,8 +425,7 @@ router.get(
   '/google/callback',
   passport.authenticate('google', {
     session: false,
-    failureRedirect:
-      `${process.env.FRONTEND_URL}/auth/login`
+    failureRedirect: `${process.env.FRONTEND_URL}/auth/login?error=google_cancelled`
   }),
   async (req, res) => {
     try {
