@@ -606,4 +606,66 @@ router.put(
   }
 );
 
+// update photo
+router.post(
+  '/upload-avatar',
+  authenticateToken,
+  upload.single('avatar'),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          error: 'لم يتم اختيار صورة'
+        });
+      }
+
+      const fileExt =
+        req.file.originalname.split('.').pop();
+
+      const fileName =
+        `${req.user.id}-${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } =
+        await supabase.storage
+          .from('avatars')
+          .upload(fileName, req.file.buffer, {
+            contentType: req.file.mimetype,
+            upsert: true
+          });
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const {
+        data: { publicUrl }
+      } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName);
+
+      await req.app.locals.pool.query(
+        `
+        UPDATE users
+        SET avatar_url = $1,
+            updated_at = NOW()
+        WHERE id = $2
+        `,
+        [publicUrl, req.user.id]
+      );
+
+      res.json({
+        success: true,
+        avatar_url: publicUrl
+      });
+
+    } catch (err) {
+      console.error(err);
+
+      res.status(500).json({
+        error: 'فشل رفع الصورة'
+      });
+    }
+  }
+);
+
 module.exports = router;
