@@ -536,9 +536,7 @@ router.get(
     } catch (err) {
       console.error(err);
 
-      res.redirect(
-        `${process.env.FRONTEND_URL}/auth/login`
-      );
+      res.redirect(`${process.env.FRONTEND_URL}/auth/login?error=server_error`);
     }
   }
 );
