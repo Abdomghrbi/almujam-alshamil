@@ -6,6 +6,8 @@ const { authenticateToken } = require('../middleware/auth');
 const crypto = require('crypto');
 const { sendPasswordResetEmail } = require('../services/emailService');
 const passport = require('../config/passport');
+const upload = require('../middleware/upload');
+const supabase = require('../config/supabase');
 
 if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET is missing in environment variables');
