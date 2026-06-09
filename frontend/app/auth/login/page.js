@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '../../layout';
 import { LogIn, User, Lock } from 'lucide-react';
@@ -9,22 +9,32 @@ import { LogIn, User, Lock } from 'lucide-react';
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Check error messages Google OAuth
+  // useSearchParams)
   useEffect(() => {
-    const googleError = searchParams.get('error');
-    if (googleError === 'google_cancelled') {
+    if (typeof window === 'undefined') return;
+
+    const params = new URLSearchParams(window.location.search);
+    const err = params.get('error');
+
+    if (err === 'google_cancelled') {
       setError('تم إلغاء تسجيل الدخول. يرجى المحاولة مرة أخرى.');
-    } else if (googleError === 'no_email') {
-      setError('لم نتمكن من الحصول على البريد الإلكتروني من Google.');
-    } else if (googleError === 'server_error') {
+    } else if (err === 'no_email') {
+      setError('لم نتمكن من الحصول على البريد الإلكتروني من حساب Google.');
+    } else if (err === 'server_error') {
       setError('حدث خطأ في الخادم. يرجى المحاولة لاحقاً.');
+    } else if (err === 'google_failed') {
+      setError('فشل تسجيل الدخول باستخدام Google.');
     }
-  }, [searchParams]);
+
+    // clear error parameter
+    if (err) {
+      window.history.replaceState({}, '', '/auth/login');
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
