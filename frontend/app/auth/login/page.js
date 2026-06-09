@@ -55,7 +55,7 @@ export default function LoginPage() {
       window.removeEventListener('pageshow', checkErrors);
     };
   }, []);
-}
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
