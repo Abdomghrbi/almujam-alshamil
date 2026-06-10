@@ -17,10 +17,10 @@ const STAT_CONFIG = [
 export default function HomePage() {
   const { user } = useAuth();
   const [stats, setStats] = useState({
-  approvedWords: 999,
-  audioClips: 888,
-  locationsCovered: 777,
-  contributors: 666,
+  approvedWords: null,
+  audioClips: null,
+  locationsCovered: null,
+  contributors: null,
 });
   const [statsLoading, setStatsLoading] = useState(true);
 
