@@ -17,11 +17,11 @@ const STAT_CONFIG = [
 export default function HomePage() {
   const { user } = useAuth();
   const [stats, setStats] = useState({
-    approvedWords: null,
-    audioClips: null,
-    locationsCovered: null,
-    contributors: null,
-  });
+  approvedWords: 999,
+  audioClips: 888,
+  locationsCovered: 777,
+  contributors: 666,
+});
   const [statsLoading, setStatsLoading] = useState(true);
 
   useEffect(() => {
