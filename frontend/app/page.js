@@ -25,48 +25,32 @@ export default function HomePage() {
   const [statsLoading, setStatsLoading] = useState(true);
 
   useEffect(() => {
-  alert('HomePage mounted');
-
-  let cancelled = false;
-
+  
   const loadStats = async () => {
-    try {
-      alert('Loading stats...');
+  try {
+    const apiBase =
+      process.env.NEXT_PUBLIC_API_URL ||
+      'https://almujam-alshamil-api.onrender.com';
 
-      const apiBase =
-        process.env.NEXT_PUBLIC_API_URL ||
-        'https://almujam-alshamil-api.onrender.com';
+    const res = await fetch(`${apiBase}/api/stats`);
+    const data = await res.json();
 
-      alert(apiBase);
-
-      const res = await fetch(`${apiBase}/api/stats`);
-
-      alert(`Status: ${res.status}`);
-
-      const data = await res.json();
-
-      alert(JSON.stringify(data));
-
-      if (cancelled) return;
-
-      if (res.ok) {
-        setStats({
-          approvedWords: Number(data.approvedWords ?? 0),
-          audioClips: Number(data.audioClips ?? 0),
-          locationsCovered: Number(data.locationsCovered ?? 0),
-          contributors: Number(data.contributors ?? 0),
-        });
-      }
-    } catch (err) {
-      alert(`ERROR: ${err.message}`);
-      console.error(err);
-    } finally {
-      if (!cancelled) {
-        setStatsLoading(false);
-      }
+    if (!cancelled && res.ok) {
+      setStats({
+        approvedWords: Number(data.approvedWords ?? 0),
+        audioClips: Number(data.audioClips ?? 0),
+        locationsCovered: Number(data.locationsCovered ?? 0),
+        contributors: Number(data.contributors ?? 0),
+      });
     }
-  };
+  } catch (err) {
+    console.error(err);
+  }
 
+  if (!cancelled) {
+    setStatsLoading(false);
+  }
+};
   loadStats();
 
   return () => {
