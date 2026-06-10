@@ -25,7 +25,8 @@ export default function HomePage() {
   const [statsLoading, setStatsLoading] = useState(true);
 
   useEffect(() => {
-  
+    let cancelled = false;
+    
   const loadStats = async () => {
   try {
     const apiBase =
