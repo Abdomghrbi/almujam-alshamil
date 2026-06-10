@@ -31,7 +31,12 @@ export default function HomePage() {
       try {
         const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com';
         const res = await fetch(`${apiBase}/api/stats`, { cache: 'no-store' });
-        const data = await res.json();
+
+alert(`Status: ${res.status}`);
+
+const data = await res.json();
+
+alert(JSON.stringify(data));
 
         if (cancelled) return;
 
