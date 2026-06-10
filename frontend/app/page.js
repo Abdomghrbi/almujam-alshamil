@@ -25,42 +25,54 @@ export default function HomePage() {
   const [statsLoading, setStatsLoading] = useState(true);
 
   useEffect(() => {
-    let cancelled = false;
+  alert('HomePage mounted');
 
-    const loadStats = async () => {
-      try {
-        const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com';
-        const res = await fetch(`${apiBase}/api/stats`, { cache: 'no-store' });
+  let cancelled = false;
 
-alert(`Status: ${res.status}`);
+  const loadStats = async () => {
+    try {
+      alert('Loading stats...');
 
-const data = await res.json();
+      const apiBase =
+        process.env.NEXT_PUBLIC_API_URL ||
+        'https://almujam-alshamil-api.onrender.com';
 
-alert(JSON.stringify(data));
+      alert(apiBase);
 
-        if (cancelled) return;
+      const res = await fetch(`${apiBase}/api/stats`);
 
-        if (res.ok) {
-          setStats({
-            approvedWords: Number(data.approvedWords ?? 0),
-            audioClips: Number(data.audioClips ?? 0),
-            locationsCovered: Number(data.locationsCovered ?? 0),
-            contributors: Number(data.contributors ?? 0),
-          });
-        }
-      } catch (err) {
-        // Keep the fallback placeholders if the API is unavailable.
-      } finally {
-        if (!cancelled) setStatsLoading(false);
+      alert(`Status: ${res.status}`);
+
+      const data = await res.json();
+
+      alert(JSON.stringify(data));
+
+      if (cancelled) return;
+
+      if (res.ok) {
+        setStats({
+          approvedWords: Number(data.approvedWords ?? 0),
+          audioClips: Number(data.audioClips ?? 0),
+          locationsCovered: Number(data.locationsCovered ?? 0),
+          contributors: Number(data.contributors ?? 0),
+        });
       }
-    };
+    } catch (err) {
+      alert(`ERROR: ${err.message}`);
+      console.error(err);
+    } finally {
+      if (!cancelled) {
+        setStatsLoading(false);
+      }
+    }
+  };
 
-    loadStats();
+  loadStats();
 
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  return () => {
+    cancelled = true;
+  };
+}, []);
 
   const formatStatValue = (value) => {
     if (statsLoading) return '…';
