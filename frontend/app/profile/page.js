@@ -11,6 +11,8 @@ export default function ProfilePage() {
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -32,30 +34,71 @@ export default function ProfilePage() {
 
         if (res.ok) {
           setForm({
-            display_name:
-              data.user.display_name || '',
-            bio:
-              data.user.bio || '',
-            avatar_url:
-              data.user.avatar_url || ''
+            display_name: data.user.display_name || '',
+            bio: data.user.bio || '',
+            avatar_url: data.user.avatar_url || ''
           });
         } else {
           setError(
-            data.error ||
-            'فشل تحميل الملف الشخصي'
+            data.error || 'فشل تحميل الملف الشخصي'
           );
         }
       } catch (err) {
-        setError(
-          'فشل الاتصال بالخادم'
-        );
+        setError('فشل الاتصال بالخادم');
       } finally {
         setLoading(false);
       }
     };
 
     loadProfile();
-  }, []);
+  }, [apiUrl]);
+
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    setUploadingAvatar(true);
+    setError('');
+    setMessage('');
+
+    try {
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      const res = await fetch(
+        `${apiUrl}/api/auth/upload-avatar`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          body: formData
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(
+          data.error || 'فشل رفع الصورة'
+        );
+      }
+
+      setForm((prev) => ({
+        ...prev,
+        avatar_url: data.avatar_url
+      }));
+
+      setMessage(
+        'تم رفع الصورة بنجاح، اضغط حفظ التغييرات'
+      );
+    } catch (err) {
+      setError(
+        err.message || 'فشل رفع الصورة'
+      );
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,8 +113,7 @@ export default function ProfilePage() {
         {
           method: 'PUT',
           headers: {
-            'Content-Type':
-              'application/json'
+            'Content-Type': 'application/json'
           },
           credentials: 'include',
           body: JSON.stringify(form)
@@ -86,14 +128,11 @@ export default function ProfilePage() {
         );
       } else {
         setError(
-          data.error ||
-          'فشل حفظ التغييرات'
+          data.error || 'فشل حفظ التغييرات'
         );
       }
     } catch (err) {
-      setError(
-        'فشل الاتصال بالخادم'
-      );
+      setError('فشل الاتصال بالخادم');
     } finally {
       setSaving(false);
     }
@@ -129,26 +168,40 @@ export default function ProfilePage() {
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-4"
+          className="space-y-5"
         >
 
-        <div>
-            <label className="block mb-2 text-sm font-medium">
+          <div>
+            <label className="block mb-3 text-sm font-medium">
               الصورة الشخصية
             </label>
 
-            
-          </div>
+            <div className="flex flex-col items-center gap-4">
 
-          {form.avatar_url && (
-            <div className="flex justify-center">
               <img
-                src={form.avatar_url}
+                src={
+                  form.avatar_url ||
+                  'https://via.placeholder.com/150'
+                }
                 alt="avatar"
-                className="w-24 h-24 rounded-full object-cover border"
+                className="w-28 h-28 rounded-full object-cover border-2"
               />
+
+              <label className="btn-outline cursor-pointer">
+                {uploadingAvatar
+                  ? 'جاري رفع الصورة...'
+                  : 'اختيار صورة جديدة'}
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarUpload}
+                  className="hidden"
+                />
+              </label>
+
             </div>
-          )}
+          </div>
 
           <div>
             <label className="block mb-2 text-sm font-medium">
@@ -161,8 +214,7 @@ export default function ProfilePage() {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  display_name:
-                    e.target.value
+                  display_name: e.target.value
                 })
               }
               className="input-field"
@@ -180,8 +232,7 @@ export default function ProfilePage() {
               onChange={(e) =>
                 setForm({
                   ...form,
-                  bio:
-                    e.target.value
+                  bio: e.target.value
                 })
               }
               className="input-field"
@@ -190,7 +241,9 @@ export default function ProfilePage() {
 
           <button
             type="submit"
-            disabled={saving}
+            disabled={
+              saving || uploadingAvatar
+            }
             className="btn-primary w-full"
           >
             {saving
