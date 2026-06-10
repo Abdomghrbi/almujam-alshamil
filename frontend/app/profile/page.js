@@ -187,7 +187,7 @@ export default function ProfilePage() {
                 className="w-28 h-28 rounded-full object-cover border-2"
               />
 
-              <label className="btn-outline cursor-pointer">
+              <label className="cursor-pointer px-3 py-2 rounded-lg bg-blue-600 text-white text-sm">
                 {uploadingAvatar
                   ? 'جاري رفع الصورة...'
                   : 'اختيار صورة جديدة'}
