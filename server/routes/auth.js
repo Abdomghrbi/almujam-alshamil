@@ -624,4 +624,41 @@ router.post(
   }
 );
 
+router.put(
+  '/profile',
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const { display_name, bio } = req.body;
+
+      await req.app.locals.pool.query(
+        `
+        UPDATE users
+        SET
+          display_name = $1,
+          bio = $2,
+          updated_at = NOW()
+        WHERE id = $3
+        `,
+        [
+          display_name || '',
+          bio || '',
+          req.user.id
+        ]
+      );
+
+      res.json({
+        success: true,
+        message: 'تم تحديث الملف الشخصي'
+      });
+
+    } catch (err) {
+      console.error(err);
+
+      res.status(500).json({
+        error: 'فشل تحديث الملف الشخصي'
+      });
+    }
+  }
+);
 module.exports = router;
