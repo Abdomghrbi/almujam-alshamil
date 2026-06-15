@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { BookOpen, MapPin, Mic, Hash } from 'lucide-react';
+import Link from 'next/link';
 
 export default function WordDetailPage() {
   const params = useParams();
@@ -146,7 +147,10 @@ export default function WordDetailPage() {
 
 {wordData.contributor_display_name && (
   <div className="mt-4 p-3 border rounded-xl">
-    <div className="flex items-center gap-3">
+<Link
+  href={`/user/${wordData.contributor_id}`}
+  className="flex items-center gap-3"
+>
 
       <img
         src={
