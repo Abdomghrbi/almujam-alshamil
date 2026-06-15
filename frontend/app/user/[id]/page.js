@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ArrowLeft, Calendar, BookOpen } from 'lucide-react';
+import { ArrowLeft, Calendar } from 'lucide-react';
 import Link from 'next/link';
 
 export default function UserProfilePage() {
@@ -14,7 +14,10 @@ export default function UserProfilePage() {
   const userId = params?.id;
 
   useEffect(() => {
+    console.log('🟢 userId from params:', userId);  // ← أضيف هاد
+
     if (!userId) {
+      console.log('🔴 userId is empty!');  // ← وأضيف هاد
       setError('معرف المستخدم غير موجود');
       setLoading(false);
       return;
@@ -26,16 +29,26 @@ export default function UserProfilePage() {
 
       try {
         const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com';
+        const url = `${apiBase}/api/user/${encodeURIComponent(userId)}`;
         
-        // ✅ جرب /api/user/ أولاً، إذا فشل جرب /user/
-        let res = await fetch(`${apiBase}/api/user/${encodeURIComponent(userId)}`);
+        console.log('🟢 Fetching URL:', url);  // ← أضيف هاد
+
+        let res = await fetch(url);
         
+        console.log('🟡 First response status:', res.status);  // ← وأضيف هاد
+
         if (!res.ok) {
-          // fallback: جرب بدون /api
-          res = await fetch(`${apiBase}/user/${encodeURIComponent(userId)}`);
+          const fallbackUrl = `${apiBase}/user/${encodeURIComponent(userId)}`;
+          console.log('🟡 Trying fallback:', fallbackUrl);  // ← وأضيف هاد
+          
+          res = await fetch(fallbackUrl);
+          console.log('🟡 Fallback response status:', res.status);  // ← وأضيف هاد
         }
 
         if (!res.ok) {
+          const errorText = await res.text();
+          console.log('🔴 Error response body:', errorText);  // ← وأضيف هاد
+          
           if (res.status === 404) {
             throw new Error('المستخدم غير موجود');
           }
@@ -43,9 +56,12 @@ export default function UserProfilePage() {
         }
 
         const data = await res.json();
+        console.log('🟢 Success data:', data);  // ← أضيف هاد
+        
         setUser(data.user || data);
 
       } catch (err) {
+        console.error('🔴 Fetch error:', err.message);  // ← تأكد من هاد
         setError(err.message);
       } finally {
         setLoading(false);
@@ -54,6 +70,7 @@ export default function UserProfilePage() {
 
     fetchUser();
   }, [userId]);
+
 
   if (loading) {
     return (
