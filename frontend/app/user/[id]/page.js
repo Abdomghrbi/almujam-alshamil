@@ -1,5 +1,6 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ArrowLeft, Calendar, BookOpen } from 'lucide-react';
@@ -94,7 +95,7 @@ export default function UserProfilePage() {
         <ArrowLeft size={20} />
         <span>العودة للرئيسية</span>
       </Link>
-
+      <h1>ملف الناشر</h1>
       <div className="card mb-8">
         <div className="flex items-center gap-4">
           <img
