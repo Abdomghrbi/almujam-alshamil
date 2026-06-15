@@ -211,6 +211,79 @@ router.post('/', authenticateToken, async (req, res) => {
 });
 
 /**
+ * GET /api/words/count?contributor_id=1
+ * عدد كلمات المستخدم
+ */
+router.get('/count', async (req, res) => {
+  try {
+    const pool = req.app.locals.pool;
+    const contributorId = req.query.contributor_id;
+
+    if (!contributorId) {
+      return res.status(400).json({ error: 'contributor_id مطلوب' });
+    }
+
+    const result = await pool.query(
+      `
+      SELECT COUNT(*) as total
+      FROM words
+      WHERE contributor_id = $1 AND status = 'approved'
+      `,
+      [contributorId]
+    );
+
+    res.json({
+      contributor_id: contributorId,
+      total_words: parseInt(result.rows[0].total)
+    });
+
+  } catch (err) {
+    console.error('Count words error:', err);
+    res.status(500).json({ error: 'خطأ في جلب العدد' });
+  }
+});
+
+/**
+ * GET /api/words?contributor_id=1
+ * قائمة كلمات المستخدم
+ */
+router.get('/', async (req, res) => {
+  try {
+    const pool = req.app.locals.pool;
+    const contributorId = req.query.contributor_id;
+
+    if (!contributorId) {
+      return res.status(400).json({ error: 'contributor_id مطلوب' });
+    }
+
+    const result = await pool.query(
+      `
+      SELECT 
+        id, 
+        word, 
+        slug, 
+        meaning, 
+        word_type, 
+        created_at
+      FROM words
+      WHERE contributor_id = $1 AND status = 'approved'
+      ORDER BY created_at DESC
+      `,
+      [contributorId]
+    );
+
+    res.json({
+      contributor_id: contributorId,
+      words: result.rows
+    });
+
+  } catch (err) {
+    console.error('Get words list error:', err);
+    res.status(500).json({ error: 'خطأ في جلب الكلمات' });
+  }
+});
+
+/**
  * GET /api/words/:id
  * جلب كلمة واحدة (by id, slug, or word)
  */
@@ -226,7 +299,7 @@ router.get('/:id', async (req, res) => {
   l.country,
   l.state,
   l.district,
-  u.id AS contributor_id,           -- مرة واحدة بس
+  u.id AS contributor_id,
   u.username AS contributor_name,
   u.display_name AS contributor_display_name,
   u.avatar_url AS contributor_avatar,
