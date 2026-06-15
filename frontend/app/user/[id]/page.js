@@ -114,7 +114,7 @@ export default function UserProfilePage() {
               <p className="text-sm text-surface-600 dark:text-surface-400 mt-2">{user.bio}</p>
             )}
             
-            {/* عدد الكلمات */}
+            {/* عدد الكلمات المضافة */}
             <div className="flex items-center gap-2 text-sm text-surface-500 mt-2">
               <BookOpen size={14} />
               <span>{wordCount} {wordCount === 1 ? 'كلمة' : 'كلمات'} مضافة</span>
