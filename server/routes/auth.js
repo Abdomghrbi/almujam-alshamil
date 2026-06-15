@@ -676,4 +676,43 @@ router.put(
     }
   }
 );
+
+router.get('/user/:id', async (req, res) => {
+  try {
+    const pool = req.app.locals.pool;
+
+    const result = await pool.query(
+      `
+      SELECT
+        id,
+        username,
+        display_name,
+        bio,
+        avatar_url,
+        created_at
+      FROM users
+      WHERE id = $1
+      LIMIT 1
+      `,
+      [req.params.id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: 'المستخدم غير موجود'
+      });
+    }
+
+    res.json({
+      user: result.rows[0]
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      error: 'خطأ في جلب المستخدم'
+    });
+  }
+});
 module.exports = router;
