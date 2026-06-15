@@ -229,7 +229,7 @@ router.get('/:id', async (req, res) => {
   u.id AS contributor_id,
   u.username AS contributor_name,
   u.display_name AS contributor_display_name,
-  u.avatar_url AS contributor_avatar,
+  u.avatar_url AS contributor_avatar,u.id AS contributor_id,
   EXISTS (
     SELECT 1
     FROM audio_clips ac
