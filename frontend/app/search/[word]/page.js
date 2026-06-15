@@ -145,32 +145,22 @@ export default function WordDetailPage() {
             </div>
           )}
 
-{wordData.contributor_display_name && (
+{wordData.contributor_id && wordData.contributor_display_name && (
   <div className="mt-4 p-3 border rounded-xl">
-  <Link
-  href={`/user/${wordData.contributor_id}`}
-  className="flex items-center gap-3"
->
-
+    <Link
+      href={`/user/${encodeURIComponent(wordData.contributor_id)}`}
+      className="flex items-center gap-3"
+    >
       <img
-        src={
-          wordData.contributor_avatar ||
-          'https://via.placeholder.com/80'
-        }
-        alt="contributor"
+        src={wordData.contributor_avatar || '/default-avatar.png'}
+        alt={wordData.contributor_display_name}
         className="w-12 h-12 rounded-full object-cover border"
+        onError={(e) => { e.target.src = '/default-avatar.png'; }}
       />
-
       <div>
-        <div className="text-sm text-surface-500">
-          أضيفت بواسطة
-        </div>
-
-        <div className="font-semibold">
-          {wordData.contributor_display_name}
-        </div>
+        <div className="text-sm text-surface-500">أضيفت بواسطة</div>
+        <div className="font-semibold">{wordData.contributor_display_name}</div>
       </div>
-
     </Link>
   </div>
 )}
