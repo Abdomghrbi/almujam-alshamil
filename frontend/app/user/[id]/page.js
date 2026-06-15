@@ -2,12 +2,13 @@
 
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ArrowLeft, Calendar } from 'lucide-react';
+import { ArrowLeft, Calendar, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 
 export default function UserProfilePage() {
   const params = useParams();
   const [user, setUser] = useState(null);
+  const [wordCount, setWordCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -20,27 +21,32 @@ export default function UserProfilePage() {
       return;
     }
 
-    const fetchUser = async () => {
+    const fetchUserData = async () => {
       setLoading(true);
       setError('');
 
       try {
         const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com';
         
-        // ✅ الـ URL الصحيح
-        const url = `${apiBase}/api/auth/user/${encodeURIComponent(userId)}`;
+        // جلب بيانات المستخدم
+        const userRes = await fetch(`${apiBase}/api/auth/user/${encodeURIComponent(userId)}`);
         
-        const res = await fetch(url);
-
-        if (!res.ok) {
-          if (res.status === 404) {
+        if (!userRes.ok) {
+          if (userRes.status === 404) {
             throw new Error('المستخدم غير موجود');
           }
           throw new Error('خطأ في جلب البيانات');
         }
 
-        const data = await res.json();
-        setUser(data.user || data);
+        const userData = await userRes.json();
+        setUser(userData.user || userData);
+
+        // جلب عدد الكلمات
+        const countRes = await fetch(`${apiBase}/api/words/count?contributor_id=${encodeURIComponent(userId)}`);
+        if (countRes.ok) {
+          const countData = await countRes.json();
+          setWordCount(countData.total_words || 0);
+        }
 
       } catch (err) {
         setError(err.message);
@@ -49,7 +55,7 @@ export default function UserProfilePage() {
       }
     };
 
-    fetchUser();
+    fetchUserData();
   }, [userId]);
 
   if (loading) {
@@ -107,10 +113,17 @@ export default function UserProfilePage() {
             {user.bio && (
               <p className="text-sm text-surface-600 dark:text-surface-400 mt-2">{user.bio}</p>
             )}
+            
+            {/* عدد الكلمات */}
+            <div className="flex items-center gap-2 text-sm text-surface-500 mt-2">
+              <BookOpen size={14} />
+              <span>{wordCount} {wordCount === 1 ? 'كلمة' : 'كلمات'} مضافة</span>
+            </div>
+
             {joinedDate && (
               <div className="flex items-center gap-2 text-sm text-surface-500 mt-2">
                 <Calendar size={14} />
-                <span>انضم بتاريخ {joinedDate}</span>
+                <span> تاريخ الانضمام {joinedDate}</span>
               </div>
             )}
           </div>
