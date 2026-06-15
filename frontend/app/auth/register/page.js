@@ -22,7 +22,7 @@ export default function RegisterPage() {
       const err = params.get('error');
 
       if (err === 'google_cancelled') {
-        setError('تم إلغاء التسجيل باستخدام Google. يرجى المحاولة مرة أخرى.');
+        setError('تم تسجيل الخروج.');
       } else if (err === 'no_email') {
         setError('لم نتمكن من الحصول على البريد الإلكتروني من حساب Google.');
       } else if (err === 'server_error') {
