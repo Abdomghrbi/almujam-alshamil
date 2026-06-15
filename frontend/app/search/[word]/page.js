@@ -145,6 +145,8 @@ export default function WordDetailPage() {
             </div>
           )}
 
+// في WordDetailPage.js - غيّر هالجزء:
+
 {wordData.contributor_id && wordData.contributor_display_name && (
   <div className="mt-4 p-3 border rounded-xl">
     <Link
@@ -152,10 +154,12 @@ export default function WordDetailPage() {
       className="flex items-center gap-3"
     >
       <img
-        src={wordData.contributor_avatar || '/default-avatar.png'}
+        src={wordData.contributor_avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(wordData.contributor_display_name)}&background=random&size=128`}
         alt={wordData.contributor_display_name}
         className="w-12 h-12 rounded-full object-cover border"
-        onError={(e) => { e.target.src = '/default-avatar.png'; }}
+        onError={(e) => { 
+          e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(wordData.contributor_display_name)}&background=random&size=128`; 
+        }}
       />
       <div>
         <div className="text-sm text-surface-500">أضيفت بواسطة</div>
