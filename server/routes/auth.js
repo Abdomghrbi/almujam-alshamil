@@ -678,12 +678,8 @@ router.put(
 );
 
 router.get('/user/:id', async (req, res) => {
-  console.log('🔍 GET /user/:id called with id:', req.params.id);  // ← أضيف هاد
-
   try {
     const pool = req.app.locals.pool;
-
-    console.log('🔍 Querying database for user id:', req.params.id);  // ← أضيف هاد
 
     const result = await pool.query(
       `
@@ -701,23 +697,19 @@ router.get('/user/:id', async (req, res) => {
       [req.params.id]
     );
 
-    console.log('🔍 Query result rows:', result.rows.length);  // ← أضيف هاد
-
     if (result.rows.length === 0) {
-      console.log('🔴 User not found for id:', req.params.id);  // ← أضيف هاد
       return res.status(404).json({
         error: 'المستخدم غير موجود'
       });
     }
-
-    console.log('🟢 User found:', result.rows[0].username);  // ← أضيف هاد
 
     res.json({
       user: result.rows[0]
     });
 
   } catch (err) {
-    console.error('🔴 Error in /user/:id:', err.message);  // ← أضيف هاد
+    console.error(err);
+
     res.status(500).json({
       error: 'خطأ في جلب المستخدم'
     });
