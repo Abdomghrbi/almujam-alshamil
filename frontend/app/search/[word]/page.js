@@ -147,7 +147,7 @@ export default function WordDetailPage() {
 
 {wordData.contributor_display_name && (
   <div className="mt-4 p-3 border rounded-xl">
-<Link
+  <Link
   href={`/user/${wordData.contributor_id}`}
   className="flex items-center gap-3"
 >
@@ -171,7 +171,7 @@ export default function WordDetailPage() {
         </div>
       </div>
 
-    </div>
+    </Link>
   </div>
 )}
 
