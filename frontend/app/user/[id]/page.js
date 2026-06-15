@@ -1,4 +1,3 @@
-// app/user/[id]/page.js
 'use client';
 
 import { useParams } from 'next/navigation';
@@ -28,8 +27,14 @@ export default function UserProfilePage() {
       try {
         const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://almujam-alshamil-api.onrender.com';
         
-        const res = await fetch(`${apiBase}/api/user/${encodeURIComponent(userId)}`);
+        // ✅ جرب /api/user/ أولاً، إذا فشل جرب /user/
+        let res = await fetch(`${apiBase}/api/user/${encodeURIComponent(userId)}`);
         
+        if (!res.ok) {
+          // fallback: جرب بدون /api
+          res = await fetch(`${apiBase}/user/${encodeURIComponent(userId)}`);
+        }
+
         if (!res.ok) {
           if (res.status === 404) {
             throw new Error('المستخدم غير موجود');
@@ -64,10 +69,7 @@ export default function UserProfilePage() {
         <div className="card">
           <h2 className="text-xl font-bold text-surface-800 dark:text-white mb-2">خطأ</h2>
           <p className="text-surface-500">{error}</p>
-          <Link 
-            href="/" 
-            className="mt-4 inline-block text-primary-500 hover:underline"
-          >
+          <Link href="/" className="mt-4 inline-block text-primary-500 hover:underline">
             العودة للرئيسية
           </Link>
         </div>
@@ -85,16 +87,11 @@ export default function UserProfilePage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* زر الرجوع */}
-      <Link 
-        href="/" 
-        className="flex items-center gap-2 text-surface-500 hover:text-surface-700 mb-6 transition-colors"
-      >
+      <Link href="/" className="flex items-center gap-2 text-surface-500 hover:text-surface-700 mb-6 transition-colors">
         <ArrowLeft size={20} />
         <span>العودة للرئيسية</span>
       </Link>
 
-      {/* بطاقة المستخدم */}
       <div className="card mb-8">
         <div className="flex items-center gap-4">
           <img
@@ -106,16 +103,12 @@ export default function UserProfilePage() {
             }}
           />
           <div>
-            <h1 className="text-2xl font-bold text-surface-900 dark:text-white">
-              {displayName}
-            </h1>
+            <h1 className="text-2xl font-bold text-surface-900 dark:text-white">{displayName}</h1>
             {user.username && user.username !== displayName && (
               <p className="text-sm text-surface-500">@{user.username}</p>
             )}
             {user.bio && (
-              <p className="text-sm text-surface-600 dark:text-surface-400 mt-2">
-                {user.bio}
-              </p>
+              <p className="text-sm text-surface-600 dark:text-surface-400 mt-2">{user.bio}</p>
             )}
             {joinedDate && (
               <div className="flex items-center gap-2 text-sm text-surface-500 mt-2">
