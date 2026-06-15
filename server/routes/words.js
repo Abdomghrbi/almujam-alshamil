@@ -222,31 +222,34 @@ router.get('/:id', async (req, res) => {
     const result = await pool.query(
       `
       SELECT
-        w.*,
-        l.country,
-        l.state,
-        l.district,
-        u.username AS contributor_name,
-        EXISTS (
-          SELECT 1
-          FROM audio_clips ac
-          WHERE ac.word_id = w.id
-        ) AS has_audio,
-        (
-          SELECT ac.file_url
-          FROM audio_clips ac
-          WHERE ac.word_id = w.id
-          ORDER BY ac.created_at ASC
-          LIMIT 1
-        ) AS audio_url
-      FROM words w
-      LEFT JOIN locations l ON w.location_id = l.id
-      LEFT JOIN users u ON w.contributor_id = u.id
-      WHERE w.id::text = $1
-         OR w.slug = $1
-         OR LOWER(w.word) = LOWER($1)
-      ORDER BY w.created_at DESC
-      LIMIT 1
+  w.*,
+  l.country,
+  l.state,
+  l.district,
+  u.id AS contributor_id,
+  u.username AS contributor_name,
+  u.display_name AS contributor_display_name,
+  u.avatar_url AS contributor_avatar,
+  EXISTS (
+    SELECT 1
+    FROM audio_clips ac
+    WHERE ac.word_id = w.id
+  ) AS has_audio,
+  (
+    SELECT ac.file_url
+    FROM audio_clips ac
+    WHERE ac.word_id = w.id
+    ORDER BY ac.created_at ASC
+    LIMIT 1
+  ) AS audio_url
+FROM words w
+LEFT JOIN locations l ON w.location_id = l.id
+LEFT JOIN users u ON w.contributor_id = u.id
+WHERE w.id::text = $1
+   OR w.slug = $1
+   OR LOWER(w.word) = LOWER($1)
+ORDER BY w.created_at DESC
+LIMIT 1
       `,
       [identifier]
     );
