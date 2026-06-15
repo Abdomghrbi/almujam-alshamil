@@ -145,8 +145,6 @@ export default function WordDetailPage() {
             </div>
           )}
 
-// في WordDetailPage.js - غيّر هالجزء:
-
 {wordData.contributor_id && wordData.contributor_display_name && (
   <div className="mt-4 p-3 border rounded-xl">
     <Link
