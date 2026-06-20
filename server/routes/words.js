@@ -318,9 +318,12 @@ router.get('/:id', async (req, res) => {
 FROM words w
 LEFT JOIN users u ON w.contributor_id = u.id
 LEFT JOIN locations l ON w.location_id = l.id
-WHERE w.id::text = $1
-   OR w.slug = $1
-   OR LOWER(w.word) = LOWER($1)
+WHERE w.status = 'approved'
+  AND (
+    w.id::text = $1
+    OR w.slug = $1
+    OR LOWER(w.word) = LOWER($1)
+  )
 ORDER BY w.created_at DESC
 LIMIT 1
       `,
